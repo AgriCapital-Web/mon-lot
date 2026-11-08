@@ -212,7 +212,7 @@ function AdminPage() {
             <h1 className="mt-1 text-3xl font-semibold">Administration Mon Lot</h1>
             <p className="mt-2 text-sm text-muted-foreground">Gestion du catalogue et suivi des demandes.</p>
           </div>
-          {context?.isAdmin ? <div className="flex flex-wrap gap-2"><Link to="/admin/partenaires" className="inline-flex h-10 items-center rounded-lg border border-border px-4 text-sm font-semibold">Candidatures partenaires</Link><Link to="/admin/marketplace" className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground">Marketplace</Link><button type="button" onClick={handleLogout} disabled={busy} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-semibold"><LogOut className="size-4" /> Déconnexion</button></div> : null}
+          {context?.isAdmin ? <div className="flex flex-wrap gap-2"><Link to="/admin-partenaires" className="inline-flex h-10 items-center rounded-lg border border-border px-4 text-sm font-semibold">Candidatures partenaires</Link><Link to="/admin-marketplace" className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground">Marketplace</Link><button type="button" onClick={handleLogout} disabled={busy} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-semibold"><LogOut className="size-4" /> Déconnexion</button></div> : null}
         </div>
 
         {error ? <p role="alert" className="mt-6 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">{error}</p> : null}
