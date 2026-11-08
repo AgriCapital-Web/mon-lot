@@ -95,7 +95,7 @@ function FicheTerrain() {
     }
   }
   const plan = computePlan(lot.cash_price, duree);
-  const achetable = lot.status === "disponible";
+  const achetable = lot.status === "disponible" && !lot.is_catalogue_preview;
   const hasCoordinates = lot.latitude !== null && lot.longitude !== null;
 
   return (
@@ -124,13 +124,14 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
             {lot.gallery_urls?.length ? <section aria-label="Galerie photos" className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4">{lot.gallery_urls.map((url, index) => <img key={url + index} src={url} alt={"Vue " + (index + 1) + " du terrain " + lot.reference} loading="lazy" className="aspect-[4/3] w-full rounded-lg border border-border object-cover" />)}</section> : null}
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>{statusLabel[lot.status]}</span>
+              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>{lot.is_catalogue_preview ? "À confirmer" : statusLabel[lot.status]}</span>
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Réf. {lot.reference}
               </span>
             </div>
 
             <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">{lot.title}</h1>
+            {lot.is_catalogue_preview ? <p className="mt-3 rounded-lg border border-border bg-secondary/50 p-4 text-sm leading-relaxed text-muted-foreground">Le prix, la disponibilité, la situation foncière et les pièces relatives à ce terrain sont à confirmer auprès de Mon Lot avant toute décision ou transaction.</p> : null}
             <p className="mt-2 flex items-center gap-2 text-muted-foreground">
               <Compass className="size-4" aria-hidden="true" />
               {lot.area_name}, {lot.city}{lot.region ? ` — ${lot.region}` : ""}
@@ -199,7 +200,7 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
 
           <aside className="lg:sticky lg:top-24 lg:h-fit">
             <div className="surface-card p-6">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Prix comptant</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">{lot.is_catalogue_preview ? "Prix indicatif" : "Prix comptant"}</p>
               <p className="mt-1 font-display text-3xl font-semibold text-primary">{formatFcfa(lot.cash_price)}</p>
 
               <p className="mt-6 text-sm font-semibold">Choisissez votre formule</p>
@@ -219,7 +220,7 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
 
               <dl className="mt-6 space-y-3 border-t border-border pt-5 text-sm">
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">Prix total de la formule</dt>
+                  <dt className="text-muted-foreground">{lot.is_catalogue_preview ? "Estimation de la formule" : "Prix total de la formule"}</dt>
                   <dd className="font-semibold">{formatFcfa(plan.total)}</dd>
                 </div>
                 {duree !== 0 ? <>
@@ -251,6 +252,8 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
                 >
                   {reservationOpen ? "Fermer le formulaire" : duree === 0 ? "Demander l’achat" : "Demander une réservation"}
                 </button>
+              ) : lot.is_catalogue_preview ? (
+                <Link to="/contact" className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary-dark">Demander les informations</Link>
               ) : (
                 <p className="mt-6 rounded-lg bg-muted p-4 text-center text-sm font-medium text-muted-foreground">
                   Ce terrain n'est plus disponible à l'achat.
