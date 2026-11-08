@@ -1,5 +1,4 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, Compass, FileText, Maximize, Navigation, Share2 } from "lucide-react";
 import { useState } from "react";
 
@@ -17,7 +16,7 @@ const statusLabel = {
 export const Route = createFileRoute("/terrains/$reference")({
   loader: async ({ params }) => {
     const lot = await getLotByReference({ data: { reference: params.reference } });
-    if (!lot || !lot.is_published) throw notFound();
+    if (!lot) throw notFound();
     return { lot };
   },
   head: ({ loaderData }) => {
