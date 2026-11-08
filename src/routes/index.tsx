@@ -87,10 +87,31 @@ function Accueil() {
               <div><p className="text-sm font-semibold uppercase text-primary">Sélection</p><h2 className="mt-2 text-3xl font-semibold sm:text-4xl">Terrains à la une</h2></div>
               <Link to="/terrains" className="inline-flex items-center gap-2 font-semibold text-primary">Voir le catalogue <ArrowRight className="size-4" /></Link>
             </div>
-            {featured.length ? <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{featured.slice(0, 3).map((lot) => <LotCard key={lot.id} lot={lot} />)}</div> : <div className="mt-9 border border-dashed border-border bg-background/70 p-8 text-center"><h3 className="text-lg font-semibold">Notre sélection arrive bientôt</h3><p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Aucun terrain n’est actuellement publié. Revenez prochainement ou contactez notre équipe pour nous présenter votre recherche.</p><Link to="/contact" className="mt-5 inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground">Présenter mon projet</Link></div>}
+            {featured.some((lot) => lot.is_demo) ? <p className="mt-6 rounded-lg border border-sand/60 bg-sand/10 px-4 py-3 text-sm text-muted-foreground">Mode démonstration : ces annonces, prix et caractéristiques sont fictifs. Les offres réelles seront publiées après validation par l’équipe Mon Lot.</p> : null}{featured.length ? <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{featured.slice(0, 3).map((lot) => <LotCard key={lot.id} lot={lot} demo={Boolean(lot.is_demo)} />)}</div> : <div className="mt-9 border border-dashed border-border bg-background/70 p-8 text-center"><h3 className="text-lg font-semibold">Notre sélection arrive bientôt</h3><p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Aucun terrain n’est actuellement publié. Revenez prochainement ou contactez notre équipe pour nous présenter votre recherche.</p><Link to="/contact" className="mt-5 inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground">Présenter mon projet</Link></div>}
           </div>
         </section>
 
+
+        <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase text-primary">Un parcours simple</p>
+            <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Comment ça marche ?</h2>
+            <p className="mt-3 text-muted-foreground">De la recherche à la demande de réservation, Mon Lot vous accompagne à chaque étape.</p>
+          </div>
+          <div className="mt-9 grid gap-6 md:grid-cols-3">
+            {[
+              { number: "01", title: "Explorez les terrains", text: "Comparez les emplacements, superficies, photos et informations disponibles." },
+              { number: "02", title: "Choisissez votre formule", text: "Consultez le prix comptant et simulez les possibilités de paiement échelonné." },
+              { number: "03", title: "Échangez avec l’équipe", text: "Transmettez votre demande et faites-vous accompagner pour les vérifications et les étapes suivantes." },
+            ].map((step) => (
+              <article key={step.number} className="surface-card p-6">
+                <span className="font-display text-3xl font-semibold text-sand">{step.number}</span>
+                <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
         <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="grid gap-8 bg-primary-dark p-8 text-primary-foreground sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
             <div><h2 className="text-3xl font-semibold">Un projet de terrain ?</h2><p className="mt-3 max-w-2xl text-primary-foreground/80">Notre équipe vous aide à préciser votre budget, votre zone et votre formule de paiement.</p></div>
