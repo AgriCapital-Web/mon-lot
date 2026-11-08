@@ -111,8 +111,7 @@ function Accueil() {
             ))}
           </div>
         </section>
-        <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <section className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6">
+        <section className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6">
           <div className="rounded-xl border border-border bg-card p-7 sm:flex sm:items-center sm:justify-between sm:gap-8">
             <div><p className="text-sm font-semibold uppercase text-primary">Vous êtes professionnel de l’immobilier ?</p><h2 className="mt-2 text-2xl font-semibold">Proposez vos terrains sur Mon Lot</h2><p className="mt-2 max-w-2xl text-sm text-muted-foreground">Agents, agences, promoteurs, aménageurs et propriétaires : demandez votre accès partenaire. Chaque dossier est étudié avant validation.</p></div>
             <Link to="/partenaire" className="mt-5 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground sm:mt-0">Devenir partenaire <ArrowRight className="size-4"/></Link>
