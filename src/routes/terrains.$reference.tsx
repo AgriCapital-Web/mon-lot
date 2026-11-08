@@ -76,7 +76,8 @@ function FicheTerrain() {
     event.preventDefault();
     setReservationState("sending");
     setReservationError("");
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     try {
       await sendReservation({ data: {
         reference: lot.reference,
@@ -86,7 +87,7 @@ function FicheTerrain() {
         email: String(form.get("email") ?? ""),
         message: String(form.get("message") ?? ""),
       } });
-      event.currentTarget.reset();
+      formElement.reset();
       setReservationState("success");
     } catch (error) {
       setReservationError(error instanceof Error ? error.message : "Votre demande n’a pas pu être enregistrée.");
