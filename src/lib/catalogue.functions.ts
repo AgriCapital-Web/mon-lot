@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { PUBLIC_LOT_COLUMNS, type PublicLot } from "./lots";
+import { DEMO_LOTS } from "./demo-lots";
 import { computePlan, isPlanDuration, type PlanDuration } from "./pricing";
 
 const referenceSchema = z.object({ reference: z.string().trim().min(1).max(50) });
@@ -39,7 +40,7 @@ const reservationSchema = z.object({
 /** Tous les terrains publiés, terrains en vedette disponibles d'abord. */
 export const listLots = createServerFn({ method: "GET" }).handler(async (): Promise<PublicLot[]> => {
   const supabase = await getPublicSupabaseOrNull();
-  if (!supabase) return [];
+  if (!supabase) return DEMO_LOTS;
 
   const { data, error } = await supabase
     .from("lots")
@@ -49,16 +50,16 @@ export const listLots = createServerFn({ method: "GET" }).handler(async (): Prom
 
   if (error) {
     console.error("[lots] listLots", error.message);
-    return [];
+    return DEMO_LOTS;
   }
-  return (data ?? []) as PublicLot[];
+  return data?.length ? (data as PublicLot[]) : DEMO_LOTS;
 });
 
 /** Terrains disponibles mis en vedette, triés par priorité puis par date de publication. */
 export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicLot[]> => {
     const supabase = await getPublicSupabaseOrNull();
-    if (!supabase) return [];
+    if (!supabase) return DEMO_LOTS;
 
     const { data, error } = await supabase
       .from("lots")
@@ -71,9 +72,9 @@ export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
 
     if (error) {
       console.error("[lots] listFeaturedLots", error.message);
-      return [];
+      return DEMO_LOTS;
     }
-    return (data ?? []) as PublicLot[];
+    return data?.length ? (data as PublicLot[]) : DEMO_LOTS;
   },
 );
 
@@ -81,7 +82,7 @@ export const getLotByReference = createServerFn({ method: "GET" })
   .validator((data: unknown) => referenceSchema.parse(data))
   .handler(async ({ data }): Promise<PublicLot | null> => {
     const supabase = await getPublicSupabaseOrNull();
-    if (!supabase) return null;
+    if (!supabase) return DEMO_LOTS.find((lot) => lot.reference.toLowerCase() === data.reference.toLowerCase()) ?? null;
 
     const { data: lot, error } = await supabase
       .from("lots")
@@ -91,9 +92,9 @@ export const getLotByReference = createServerFn({ method: "GET" })
 
     if (error) {
       console.error("[lots] getLotByReference", error.message);
-      return null;
+      return DEMO_LOTS.find((item) => item.reference.toLowerCase() === data.reference.toLowerCase()) ?? null;
     }
-    return (lot as PublicLot | null) ?? null;
+    return (lot as PublicLot | null) ?? DEMO_LOTS.find((item) => item.reference.toLowerCase() === data.reference.toLowerCase()) ?? null;
   });
 
 export const submitContactRequest = createServerFn({ method: "POST" })
@@ -121,6 +122,9 @@ export const submitContactRequest = createServerFn({ method: "POST" })
 export const submitReservationRequest = createServerFn({ method: "POST" })
   .validator((data: unknown) => reservationSchema.parse(data))
   .handler(async ({ data }) => {
+    if (data.reference.toUpperCase().startsWith("DEMO-")) {
+      throw new Error("Cette fiche est une démonstration : aucune réservation réelle ne peut être transmise.");
+    }
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
 
