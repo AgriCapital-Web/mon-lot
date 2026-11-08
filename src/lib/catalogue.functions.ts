@@ -14,6 +14,19 @@ const contactSchema = z.object({
   message: z.string().trim().min(5).max(1500),
 });
 
+/** Retourne null si les variables Supabase ne sont pas configurées sur l'hébergement.
+ * Le site public reste consultable pendant la configuration de la base.
+ */
+async function getPublicSupabaseOrNull() {
+  try {
+    const { createPublicSupabase } = await import("./supabase-public.server");
+    return createPublicSupabase();
+  } catch (error) {
+    console.error("[lots] Supabase public configuration unavailable", error);
+    return null;
+  }
+}
+
 const reservationSchema = z.object({
   reference: z.string().trim().min(1).max(50),
   duration: z.number().refine(isPlanDuration, "Formule invalide"),
@@ -25,8 +38,8 @@ const reservationSchema = z.object({
 
 /** Tous les terrains publiés, terrains en vedette disponibles d'abord. */
 export const listLots = createServerFn({ method: "GET" }).handler(async (): Promise<PublicLot[]> => {
-  const { createPublicSupabase } = await import("./supabase-public.server");
-  const supabase = createPublicSupabase();
+  const supabase = await getPublicSupabaseOrNull();
+  if (!supabase) return [];
 
   const { data, error } = await supabase
     .from("lots")
@@ -44,8 +57,8 @@ export const listLots = createServerFn({ method: "GET" }).handler(async (): Prom
 /** Terrains disponibles mis en vedette, triés par priorité puis par date de publication. */
 export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicLot[]> => {
-    const { createPublicSupabase } = await import("./supabase-public.server");
-    const supabase = createPublicSupabase();
+    const supabase = await getPublicSupabaseOrNull();
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from("lots")
@@ -67,8 +80,8 @@ export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
 export const getLotByReference = createServerFn({ method: "GET" })
   .validator((data: unknown) => referenceSchema.parse(data))
   .handler(async ({ data }): Promise<PublicLot | null> => {
-    const { createPublicSupabase } = await import("./supabase-public.server");
-    const supabase = createPublicSupabase();
+    const supabase = await getPublicSupabaseOrNull();
+    if (!supabase) return null;
 
     const { data: lot, error } = await supabase
       .from("lots")
