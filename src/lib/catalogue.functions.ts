@@ -65,7 +65,7 @@ export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
 );
 
 export const getLotByReference = createServerFn({ method: "GET" })
-  .inputValidator((data: unknown) => referenceSchema.parse(data))
+  .validator((data: unknown) => referenceSchema.parse(data))
   .handler(async ({ data }): Promise<PublicLot | null> => {
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
@@ -84,7 +84,7 @@ export const getLotByReference = createServerFn({ method: "GET" })
   });
 
 export const submitContactRequest = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => contactSchema.parse(data))
+  .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
@@ -106,7 +106,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
   });
 
 export const submitReservationRequest = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => reservationSchema.parse(data))
+  .validator((data: unknown) => reservationSchema.parse(data))
   .handler(async ({ data }) => {
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
