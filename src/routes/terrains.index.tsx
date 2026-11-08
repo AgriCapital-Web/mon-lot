@@ -40,7 +40,7 @@ function Catalogue() {
     <p className="text-sm font-semibold uppercase text-primary">Nos opportunités</p>
     <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Terrains disponibles</h1>
     <p className="mt-3 max-w-2xl text-muted-foreground">Retrouvez ici les terrains et parcelles présentés par Mon Lot, avec leurs informations essentielles.</p>
-    {!lots.length ? <div className="mt-8 border border-dashed border-border bg-secondary/40 p-6"><p className="font-semibold">Aucun terrain publié pour le moment</p><p className="mt-1 text-sm text-muted-foreground">Le catalogue affichera uniquement les terrains réellement enregistrés et publiés par l’administration.</p></div> : null}
+    <p className="mt-4 rounded-lg border border-border bg-secondary/40 p-4 text-sm leading-relaxed text-muted-foreground">Les prix et disponibilités sont indicatifs. La situation foncière, les documents et les conditions définitives sont confirmés par Mon Lot avant toute transaction.</p>
     <>
       <div className="mt-8 grid gap-4 border-y border-border py-5 sm:grid-cols-3">
         <label className="text-sm font-medium">Recherche<div className="relative mt-1.5"><Search className="absolute left-3 top-3 size-4 text-muted-foreground" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Référence, ville, quartier" className={`${fieldClass} pl-9`} /></div></label>
