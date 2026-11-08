@@ -122,9 +122,6 @@ export const submitContactRequest = createServerFn({ method: "POST" })
 export const submitReservationRequest = createServerFn({ method: "POST" })
   .validator((data: unknown) => reservationSchema.parse(data))
   .handler(async ({ data }) => {
-    if (data.reference.toUpperCase().startsWith("DEMO-")) {
-      throw new Error("Cette fiche est une démonstration : aucune réservation réelle ne peut être transmise.");
-    }
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
 
