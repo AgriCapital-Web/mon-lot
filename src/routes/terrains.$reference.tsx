@@ -96,7 +96,8 @@ function FicheTerrain() {
     }
   }
   const plan = computePlan(lot.cash_price, duree);
-  const achetable = lot.status === "disponible";
+  const isDemo = Boolean(lot.is_demo);
+  const achetable = !isDemo && lot.status === "disponible";
   const hasCoordinates = lot.latitude !== null && lot.longitude !== null;
 
   return (
@@ -110,6 +111,7 @@ function FicheTerrain() {
           <ArrowLeft className="size-4" aria-hidden="true" /> Catalogue
         </Link>
 
+        {isDemo ? <div className="mt-6 rounded-lg border border-sand/60 bg-sand/10 p-4 text-sm leading-relaxed text-muted-foreground"><strong className="text-foreground">Fiche de démonstration.</strong> Cette annonce sert uniquement à illustrer les fonctionnalités de Mon Lot. Les photos, prix, superficies, emplacements et documents sont fictifs ; aucune réservation ni transaction réelle ne peut être effectuée à partir de cet exemple.</div> : null}
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <div className="overflow-hidden rounded-xl border border-border">
@@ -204,10 +206,10 @@ function FicheTerrain() {
 
           <aside className="lg:sticky lg:top-24 lg:h-fit">
             <div className="surface-card p-6">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Prix comptant officiel</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">{isDemo ? "Prix indicatif — démonstration" : "Prix comptant officiel"}</p>
               <p className="mt-1 font-display text-3xl font-semibold text-primary">{formatFcfa(lot.cash_price)}</p>
 
-              <p className="mt-6 text-sm font-semibold">Choisissez votre formule</p>
+              <p className="mt-6 text-sm font-semibold">{isDemo ? "Simulation de paiement" : "Choisissez votre formule"}</p>
               <div className="mt-3 grid grid-cols-5 gap-2">
                 {ALL_DURATIONS.map((duration) => (
                   <button
@@ -247,7 +249,7 @@ function FicheTerrain() {
                 </> : null}
               </dl>
 
-              {achetable ? (
+              {isDemo ? <Link to="/contact" className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary-dark">Parler à un conseiller</Link> : achetable ? (
                 <button
                   type="button"
                   onClick={() => { setReservationOpen((open) => !open); setReservationState("idle"); }}
