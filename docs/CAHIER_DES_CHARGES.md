@@ -115,17 +115,17 @@ Responsive mobile/tablette/ordinateur, navigation clavier, labels, focus visible
 1. Accueil et catalogue utilisaient DEMO_LOTS lorsque la base était vide, contrairement à l’exigence de données réelles.
 2. La fiche /terrains/:reference utilisait une source statique distincte du catalogue. Correction effectuée : elle charge désormais la référence depuis la même fonction serveur Supabase que le catalogue.
 3. Le parcours de réservation n’était pas raccordé. Correction effectuée : formulaire intégré à la fiche, appel à submitReservationRequest, contrôle serveur du statut et accusé de réception. Les tests métier et anti-spam restent à réaliser.
-4. Aucune route d’administration/connexion n’apparaît dans l’arborescence, malgré les fonctions serveur admin.
+4. Correction initiale réalisée : route /admin avec connexion Supabase, contrôle de rôle, tableau de bord, CRUD des terrains et traitement des statuts de demandes. Restent à valider les parcours réels avec un compte administrateur et à compléter le stockage média.
 5. Upload et gestion des photos/galeries ne sont pas finalisés.
 6. L’envoi email est conditionné à une configuration externe et n’est pas démontré.
 7. Les recommandations IA existent côté serveur ; leur interface et recette restent à vérifier.
-8. Anti-spam, tests métier automatisés et tests E2E ne sont pas établis dans l’arborescence observée.
-9. La fonction private.has_role et ses politiques RLS doivent être testées sur la base réelle pour écarter récursion ou refus de lecture du rôle.
+8. Anti-spam, tests métier automatisés et tests E2E restent à établir.
+9. Correction apportée par migration : private.has_role est SECURITY DEFINER avec search_path vide et objets qualifiés, afin d’éviter la récursion RLS. Les politiques doivent encore être testées sur la base réelle.
 
 ## 11. Ordre d’exécution
-P0 données/sécurité : retirer les données fictives, brancher les fiches sur Supabase, vérifier RLS et configuration.
+P0 données/sécurité : données fictives retirées, fiches branchées sur Supabase, TanStack Start mis à niveau (1.169.4), react-store aligné (0.11.2), fonction de rôle RLS corrigée. Vérification RLS et configuration réelle encore à faire.
 P1 conversion : terminer réservation, accusé de réception et formulaires.
-P2 exploitation : connexion, tableau de bord, CRUD et gestion des demandes.
+P2 exploitation : première version de /admin livrée (connexion, tableau de bord, CRUD terrains, statuts des demandes) ; recette fonctionnelle et gestion des médias restent à faire.
 P3 enrichissement : médias, recommandations IA, emails, SEO/accessibilité.
 P4 recette : tests prix, RLS, parcours et validation production.
 
@@ -135,3 +135,10 @@ P4 recette : tests prix, RLS, parcours et validation production.
 - Validation des taux de majoration et du versement initial de 30 %.
 - Coordonnées commerciales et domaine email officiels.
 - Politique de conservation des données personnelles.
+
+
+## 13. Vérification de livraison — 8 novembre 2026
+- Branche : main.
+- Build Vercel : READY sur le commit d4f4aa67b275f55c2e364f50a9a2ee072fb6617c ; compilation client et serveur terminée.
+- La mise à niveau TanStack Start et l’alignement de react-store ont été validés par ce build.
+- La réussite du build ne remplace pas les tests de connexion, de rôles RLS, de création de terrain, de réservation et de parcours mobile sur la base réelle.

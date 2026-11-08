@@ -4,7 +4,8 @@ Référence : docs/CAHIER_DES_CHARGES.md
 ## P0 — Données et sécurité
 - [x] Retirer les terrains de démonstration des pages accueil et catalogue.
 - [x] Charger les fiches terrain depuis Supabase et supprimer la source statique de production.
-- [ ] Vérifier RLS sur une base de test (visiteur, utilisateur, administrateur).
+- [ ] Vérifier RLS sur une base de test (visiteur, utilisateur, administrateur) après la migration de correction.
+- [x] Mettre à niveau TanStack Start et aligner les dépendances de store ; build Vercel validé.
 - [ ] Vérifier les variables Vercel/Lovable sans exposer les secrets.
 
 ## P1 — Réservation et contact
@@ -15,11 +16,11 @@ Référence : docs/CAHIER_DES_CHARGES.md
 - [ ] Tester persistance des demandes et accusés de réception.
 
 ## P2 — Administration
-- [ ] Créer connexion, déconnexion et récupération de mot de passe.
-- [ ] Créer le tableau de bord.
-- [ ] Créer CRUD terrains, publication, statut, vedette et priorité.
-- [ ] Gérer les demandes de réservation et de contact.
-- [ ] Vérifier les droits utilisateur/admin.
+- [x] Créer connexion et déconnexion administrateur (récupération de mot de passe à compléter).
+- [x] Créer le premier tableau de bord administrateur.
+- [x] Créer le CRUD terrains, publication, statut, vedette et priorité (gestion des médias à compléter).
+- [x] Gérer les demandes de réservation et de contact par statut.
+- [ ] Tester les droits utilisateur/admin sur des comptes réels.
 
 ## P3 — Médias, notifications et IA
 - [ ] Finaliser upload, stockage et galerie.
