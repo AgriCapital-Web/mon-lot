@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-import logo from "@/assets/monlot-logo.png.asset.json";
+import logo from "@/assets/monlot-logo.png";
 
 const navItems = [
   { to: "/", label: "Accueil" },
@@ -18,7 +18,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link to="/" className="flex items-center" aria-label="Mon Lot — accueil">
-          <img src={logo.url} alt="Mon Lot" className="h-9 w-auto" width={200} height={68} />
+          <img src={logo} alt="Mon Lot" className="h-9 w-auto object-contain" width={200} height={68} fetchPriority="high" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Navigation principale">
