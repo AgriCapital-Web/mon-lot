@@ -65,7 +65,7 @@ export const CATALOGUE_PREVIEW_LOTS: PublicLot[] = rows.map((row, index) => {
     region,
     area_sqm: surface,
     cash_price: price,
-    status: "disponible",
+    status: "a_confirmer",
     cover_image_url: image,
     gallery_urls: [image],
     description: `Cette parcelle est présentée pour un projet ${purpose}. Sa superficie de ${surface.toLocaleString("fr-FR")} m² permet d’étudier différentes possibilités selon la configuration du site, les règles d’urbanisme et les objectifs de l’acquéreur. La situation foncière et les caractéristiques précises sont à examiner avec le dossier correspondant.`,
