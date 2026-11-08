@@ -10,6 +10,7 @@ const navItems = [
   { to: "/paiement", label: "Paiement échelonné" },
   { to: "/contact", label: "Contact" },
   { to: "/partenaire", label: "Devenir partenaire" },
+  { to: "/espace-partenaire", label: "Espace partenaire" },
 ] as const;
 
 export function SiteHeader() {
