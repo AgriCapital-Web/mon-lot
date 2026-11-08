@@ -52,7 +52,9 @@ export const listLots = createServerFn({ method: "GET" }).handler(async (): Prom
     console.error("[lots] listLots", error.message);
     return CATALOGUE_PREVIEW_LOTS;
   }
-  return data?.length ? (data as PublicLot[]) : CATALOGUE_PREVIEW_LOTS;
+  const liveLots = (data ?? []) as PublicLot[];
+  const liveReferences = new Set(liveLots.map((lot) => lot.reference.toUpperCase()));
+  return [...liveLots, ...CATALOGUE_PREVIEW_LOTS.filter((lot) => !liveReferences.has(lot.reference.toUpperCase()))];
 });
 
 /** Terrains disponibles mis en vedette, triés par priorité puis par date de publication. */
@@ -74,7 +76,10 @@ export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
       console.error("[lots] listFeaturedLots", error.message);
       return CATALOGUE_PREVIEW_LOTS.filter((lot) => lot.is_featured);
     }
-    return data?.length ? (data as PublicLot[]) : CATALOGUE_PREVIEW_LOTS.filter((lot) => lot.is_featured);
+    const liveLots = (data ?? []) as PublicLot[];
+    const liveReferences = new Set(liveLots.map((lot) => lot.reference.toUpperCase()));
+    const catalogueLots = CATALOGUE_PREVIEW_LOTS.filter((lot) => lot.is_featured && !liveReferences.has(lot.reference.toUpperCase()));
+    return [...liveLots, ...catalogueLots].slice(0, 8);
   },
 );
 
