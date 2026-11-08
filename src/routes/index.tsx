@@ -7,7 +7,6 @@ import { SiteHeader } from "@/components/site-header";
 import { listFeaturedLots } from "@/lib/catalogue.functions";
 import { SITE } from "@/lib/site";
 import heroTerrain from "@/assets/hero-terrain.jpg";
-import { DEMO_LOTS } from "@/data/demo-lots";
 
 const title = "Mon Lot — Terrains en Côte d’Ivoire";
 const description =
@@ -36,7 +35,6 @@ const avantages = [
 
 function Accueil() {
   const featured = Route.useLoaderData();
-  const displayed = featured.length ? featured : DEMO_LOTS;
 
   return (
     <div className="min-h-dvh">
@@ -89,8 +87,7 @@ function Accueil() {
               <div><p className="text-sm font-semibold uppercase text-primary">Sélection</p><h2 className="mt-2 text-3xl font-semibold sm:text-4xl">Terrains à la une</h2></div>
               <Link to="/terrains" className="inline-flex items-center gap-2 font-semibold text-primary">Voir le catalogue <ArrowRight className="size-4" /></Link>
             </div>
-            {!featured.length ? <p className="mt-6 text-sm text-muted-foreground">Aperçu de présentation — les offres réelles seront indiquées dès leur publication.</p> : null}
-            <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{displayed.slice(0, 3).map((lot) => <LotCard key={lot.id} lot={lot} demo={!featured.length} />)}</div>
+            {featured.length ? <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{featured.slice(0, 3).map((lot) => <LotCard key={lot.id} lot={lot} />)}</div> : <div className="mt-9 border border-dashed border-border bg-background/70 p-8 text-center"><h3 className="text-lg font-semibold">Notre sélection arrive bientôt</h3><p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Aucun terrain n’est actuellement publié. Revenez prochainement ou contactez notre équipe pour nous présenter votre recherche.</p><Link to="/contact" className="mt-5 inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground">Présenter mon projet</Link></div>}
           </div>
         </section>
 

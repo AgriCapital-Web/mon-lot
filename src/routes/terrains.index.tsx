@@ -7,7 +7,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { listLots } from "@/lib/catalogue.functions";
 import { STATUS_LABEL, type LotStatus } from "@/lib/lots";
-import { DEMO_LOTS } from "@/data/demo-lots";
 
 const title = "Terrains disponibles — Mon Lot";
 const description = "Consultez les terrains publiés par Mon Lot et filtrez les offres par ville, budget et disponibilité.";
@@ -24,7 +23,7 @@ export const Route = createFileRoute("/terrains/")({
 
 function Catalogue() {
   const lots = Route.useLoaderData();
-  const displayedLots = lots.length ? lots : DEMO_LOTS;
+  const displayedLots = lots;
   const [city, setCity] = useState("toutes");
   const [status, setStatus] = useState<LotStatus | "tous">("tous");
   const [search, setSearch] = useState("");
@@ -41,7 +40,7 @@ function Catalogue() {
     <p className="text-sm font-semibold uppercase text-primary">Nos opportunités</p>
     <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Terrains disponibles</h1>
     <p className="mt-3 max-w-2xl text-muted-foreground">Retrouvez ici toutes les offres actuellement publiées par Mon Lot.</p>
-    {!lots.length ? <div className="mt-8 border-y border-border py-5"><p className="font-semibold">Découvrez la présentation de notre catalogue</p><p className="mt-1 text-sm text-muted-foreground">Ces exemples illustrent le service Mon Lot. Ils ne constituent pas des offres disponibles à la réservation.</p></div> : null}
+    {!lots.length ? <div className="mt-8 border border-dashed border-border bg-secondary/40 p-6"><p className="font-semibold">Aucun terrain publié pour le moment</p><p className="mt-1 text-sm text-muted-foreground">Le catalogue affichera uniquement les terrains réellement enregistrés et publiés par l’administration.</p></div> : null}
     <>
       <div className="mt-8 grid gap-4 border-y border-border py-5 sm:grid-cols-3">
         <label className="text-sm font-medium">Recherche<div className="relative mt-1.5"><Search className="absolute left-3 top-3 size-4 text-muted-foreground" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Référence, ville, quartier" className={`${fieldClass} pl-9`} /></div></label>
@@ -49,7 +48,7 @@ function Catalogue() {
         <label className="text-sm font-medium">Disponibilité<select value={status} onChange={(e) => setStatus(e.target.value as LotStatus | "tous")} className={`${fieldClass} mt-1.5`}><option value="tous">Tous les statuts</option>{(["disponible", "reserve", "vendu"] as LotStatus[]).map((value) => <option key={value} value={value}>{STATUS_LABEL[value]}</option>)}</select></label>
       </div>
       <p className="mt-6 text-sm text-muted-foreground" aria-live="polite">{results.length} résultat{results.length === 1 ? "" : "s"}</p>
-      {results.length ? <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{results.map((lot) => <LotCard key={lot.id} lot={lot} demo={!lots.length} />)}</div> : <p className="mt-10 text-center text-muted-foreground">Aucun terrain ne correspond à votre recherche.</p>}
+      {results.length ? <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{results.map((lot) => <LotCard key={lot.id} lot={lot} />)}</div> : <p className="mt-10 text-center text-muted-foreground">{lots.length ? "Aucun terrain ne correspond à votre recherche." : "Aucune offre disponible actuellement."}</p>}
     </>
   </main><SiteFooter /></div>;
 }
