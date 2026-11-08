@@ -1,0 +1,23 @@
+{
+  "id": "/",
+  "name": "Mon Lot — Votre terrain, votre avenir",
+  "short_name": "Mon Lot",
+  "description": "Découvrez des terrains en Côte d’Ivoire et choisissez une formule de paiement adaptée à votre projet.",
+  "lang": "fr-CI",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "portrait-primary",
+  "background_color": "#F7FAF8",
+  "theme_color": "#176B4D",
+  "categories": ["business", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
