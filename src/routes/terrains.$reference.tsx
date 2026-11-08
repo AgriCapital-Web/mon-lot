@@ -1,17 +1,23 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, Compass, FileText, Maximize, Navigation, Share2 } from "lucide-react";
 import { useState } from "react";
 
-import { StatusBadge } from "@/components/lot-card";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { findLot } from "@/data/lots";
+import { getLotByReference } from "@/lib/catalogue.functions";
 import { ALL_DURATIONS, computePlan, formatFcfa, type PlanDuration } from "@/lib/pricing";
 
+const statusLabel = {
+  disponible: "Disponible",
+  reserve: "Réservé",
+  vendu: "Vendu",
+} as const;
+
 export const Route = createFileRoute("/terrains/$reference")({
-  loader: ({ params }) => {
-    const lot = findLot(params.reference);
-    if (!lot) throw notFound();
+  loader: async ({ params }) => {
+    const lot = await getLotByReference({ data: { reference: params.reference } });
+    if (!lot || !lot.is_published) throw notFound();
     return { lot };
   },
   head: ({ loaderData }) => {
@@ -21,9 +27,9 @@ export const Route = createFileRoute("/terrains/$reference")({
       };
     }
     const { lot } = loaderData;
-    const title = `${lot.titre} ${lot.reference} — ${lot.zone}, ${lot.ville} | Mon Lot`;
-    const description = `${lot.superficie} m² à ${lot.zone} (${lot.ville}). Prix cash ${formatFcfa(
-      lot.prixCash,
+    const title = `${lot.title} ${lot.reference} — ${lot.area_name}, ${lot.city} | Mon Lot`;
+    const description = `${lot.area_sqm} m² à ${lot.area_name} (${lot.city}). Prix comptant ${formatFcfa(
+      lot.cash_price,
     )} ou paiement échelonné sur 3 à 12 mois.`;
     return {
       meta: [
@@ -62,8 +68,9 @@ function TerrainIntrouvable() {
 function FicheTerrain() {
   const { lot } = Route.useLoaderData();
   const [duree, setDuree] = useState<PlanDuration>(0);
-  const plan = computePlan(lot.prixCash, duree);
-  const achetable = lot.statut === "disponible";
+  const plan = computePlan(lot.cash_price, duree);
+  const achetable = lot.status === "disponible";
+  const hasCoordinates = lot.latitude !== null && lot.longitude !== null;
 
   return (
     <div className="min-h-dvh">
@@ -80,8 +87,8 @@ function FicheTerrain() {
           <div>
             <div className="overflow-hidden rounded-xl border border-border">
               <img
-                src={lot.image}
-                alt={`${lot.titre} — ${lot.zone}, ${lot.ville}`}
+                src={lot.cover_image_url}
+                alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
                 width={1200}
                 height={800}
                 className="aspect-[3/2] w-full object-cover"
@@ -89,105 +96,97 @@ function FicheTerrain() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <StatusBadge statut={lot.statut} />
+              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>
+                {statusLabel[lot.status]}
+              </span>
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Réf. {lot.reference}
               </span>
             </div>
 
-            <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">{lot.titre}</h1>
+            <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">{lot.title}</h1>
             <p className="mt-2 flex items-center gap-2 text-muted-foreground">
               <Compass className="size-4" aria-hidden="true" />
-              {lot.zone}, {lot.ville}
+              {lot.area_name}, {lot.city}{lot.region ? ` — ${lot.region}` : ""}
             </p>
 
-            <dl className="mt-8 grid gap-4 sm:grid-cols-3">
+            <dl className={`mt-8 grid gap-4 ${hasCoordinates ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
               <div className="surface-card p-4">
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Superficie officielle
-                </dt>
+                <dt className="text-xs uppercase tracking-wide text-muted-foreground">Superficie</dt>
                 <dd className="mt-1 flex items-center gap-2 text-lg font-semibold">
                   <Maximize className="size-4 text-primary" aria-hidden="true" />
-                  {lot.superficie} m²
+                  {lot.area_sqm.toLocaleString("fr-FR")} m²
                 </dd>
               </div>
               <div className="surface-card p-4">
                 <dt className="text-xs uppercase tracking-wide text-muted-foreground">Ville</dt>
-                <dd className="mt-1 text-lg font-semibold">{lot.ville}</dd>
+                <dd className="mt-1 text-lg font-semibold">{lot.city}</dd>
               </div>
-              <div className="surface-card p-4">
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Coordonnées GPS
-                </dt>
-                <dd className="mt-1 text-sm font-semibold">
-                  {lot.coordonnees.lat.toFixed(4)}, {lot.coordonnees.lng.toFixed(4)}
-                </dd>
-              </div>
+              {hasCoordinates ? (
+                <div className="surface-card p-4">
+                  <dt className="text-xs uppercase tracking-wide text-muted-foreground">Coordonnées GPS</dt>
+                  <dd className="mt-1 text-sm font-semibold">{lot.latitude!.toFixed(5)}, {lot.longitude!.toFixed(5)}</dd>
+                </div>
+              ) : null}
             </dl>
 
             <section className="mt-10">
               <h2 className="text-xl font-semibold">Description</h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">{lot.description}</p>
-              <h3 className="mt-6 text-lg font-semibold">Accès</h3>
-              <p className="mt-2 leading-relaxed text-muted-foreground">{lot.acces}</p>
+              {lot.access_details ? <>
+                <h3 className="mt-6 text-lg font-semibold">Accès</h3>
+                <p className="mt-2 leading-relaxed text-muted-foreground">{lot.access_details}</p>
+              </> : null}
             </section>
 
-            <section className="mt-10">
-              <h2 className="text-xl font-semibold">Documents disponibles</h2>
-              <ul className="mt-4 space-y-2">
-                {lot.documents.map((d) => (
-                  <li key={d} className="flex items-center gap-2 text-sm">
-                    <FileText className="size-4 text-primary" aria-hidden="true" />
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            </section>
+            {lot.documents.length ? (
+              <section className="mt-10">
+                <h2 className="text-xl font-semibold">Documents annoncés</h2>
+                <ul className="mt-4 space-y-2">
+                  {lot.documents.map((document) => (
+                    <li key={document} className="flex items-center gap-2 text-sm">
+                      <FileText className="size-4 text-primary" aria-hidden="true" />
+                      {document}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
 
-            <section className="mt-10">
-              <h2 className="text-xl font-semibold">Localisation</h2>
-              <div className="surface-card mt-4 flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-muted-foreground">
-                  La carte interactive et le contour des bornes seront affichés ici après le relevé
-                  terrain.
-                </p>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${lot.coordonnees.lat},${lot.coordonnees.lng}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-secondary px-4 text-sm font-semibold text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
-                >
-                  <Navigation className="size-4" aria-hidden="true" /> Ouvrir la navigation
-                </a>
-              </div>
-            </section>
+            {hasCoordinates ? (
+              <section className="mt-10">
+                <h2 className="text-xl font-semibold">Localisation</h2>
+                <div className="surface-card mt-4 flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-muted-foreground">Consultez l’itinéraire vers la localisation renseignée pour ce terrain.</p>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${lot.latitude},${lot.longitude}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-secondary px-4 text-sm font-semibold text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
+                  >
+                    <Navigation className="size-4" aria-hidden="true" /> Ouvrir la navigation
+                  </a>
+                </div>
+              </section>
+            ) : null}
           </div>
 
-          {/* Panneau prix */}
           <aside className="lg:sticky lg:top-24 lg:h-fit">
             <div className="surface-card p-6">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                Prix cash officiel
-              </p>
-              <p className="mt-1 font-display text-3xl font-semibold text-primary">
-                {formatFcfa(lot.prixCash)}
-              </p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Prix comptant officiel</p>
+              <p className="mt-1 font-display text-3xl font-semibold text-primary">{formatFcfa(lot.cash_price)}</p>
 
               <p className="mt-6 text-sm font-semibold">Choisissez votre formule</p>
               <div className="mt-3 grid grid-cols-5 gap-2">
-                {ALL_DURATIONS.map((d) => (
+                {ALL_DURATIONS.map((duration) => (
                   <button
-                    key={d}
+                    key={duration}
                     type="button"
-                    onClick={() => setDuree(d)}
-                    aria-pressed={duree === d}
-                    className={`h-11 rounded-lg border text-sm font-semibold transition-colors ${
-                      duree === d
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-foreground hover:bg-secondary"
-                    }`}
+                    onClick={() => setDuree(duration)}
+                    aria-pressed={duree === duration}
+                    className={`h-11 rounded-lg border text-sm font-semibold transition-colors ${duree === duration ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground hover:bg-secondary"}`}
                   >
-                    {d === 0 ? "Cash" : `${d}m`}
+                    {duration === 0 ? "Cash" : `${duration}m`}
                   </button>
                 ))}
               </div>
@@ -197,28 +196,24 @@ function FicheTerrain() {
                   <dt className="text-muted-foreground">Prix total de la formule</dt>
                   <dd className="font-semibold">{formatFcfa(plan.total)}</dd>
                 </div>
-                {duree !== 0 && (
-                  <>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-muted-foreground">Réservation (30 %)</dt>
-                      <dd className="font-semibold">{formatFcfa(plan.reservation)}</dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-muted-foreground">Solde à payer</dt>
-                      <dd className="font-semibold">{formatFcfa(plan.balance)}</dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-muted-foreground">Échéance mensuelle</dt>
-                      <dd className="font-semibold">
-                        {formatFcfa(plan.monthly)} × {plan.duration}
-                      </dd>
-                    </div>
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-muted-foreground">Dernière échéance ajustée</dt>
-                      <dd className="font-semibold">{formatFcfa(plan.lastInstallment)}</dd>
-                    </div>
-                  </>
-                )}
+                {duree !== 0 ? <>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Premier versement (30 %)</dt>
+                    <dd className="font-semibold">{formatFcfa(plan.reservation)}</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Solde à payer</dt>
+                    <dd className="font-semibold">{formatFcfa(plan.balance)}</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Échéance mensuelle</dt>
+                    <dd className="font-semibold">{formatFcfa(plan.monthly)} × {plan.duration}</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-muted-foreground">Dernière échéance ajustée</dt>
+                    <dd className="font-semibold">{formatFcfa(plan.lastInstallment)}</dd>
+                  </div>
+                </> : null}
               </dl>
 
               {achetable ? (
@@ -226,7 +221,7 @@ function FicheTerrain() {
                   to="/contact"
                   className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary-dark"
                 >
-                  {duree === 0 ? "Acheter au comptant" : "Réserver ce terrain"}
+                  {duree === 0 ? "Demander l’achat" : "Demander une réservation"}
                 </Link>
               ) : (
                 <p className="mt-6 rounded-lg bg-muted p-4 text-center text-sm font-medium text-muted-foreground">
@@ -238,10 +233,9 @@ function FicheTerrain() {
                 type="button"
                 onClick={() => {
                   if (typeof navigator !== "undefined" && navigator.share) {
-                    void navigator.share({
-                      title: `${lot.titre} — ${lot.reference}`,
-                      url: window.location.href,
-                    });
+                    void navigator.share({ title: `${lot.title} — ${lot.reference}`, url: window.location.href });
+                  } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+                    void navigator.clipboard.writeText(window.location.href);
                   }
                 }}
                 className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-border text-sm font-semibold hover:bg-secondary"
