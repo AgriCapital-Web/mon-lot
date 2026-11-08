@@ -1,10 +1,11 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, Compass, FileText, Maximize, Navigation, Share2 } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { getLotByReference } from "@/lib/catalogue.functions";
+import { getLotByReference, submitReservationRequest } from "@/lib/catalogue.functions";
 import { ALL_DURATIONS, computePlan, formatFcfa, type PlanDuration } from "@/lib/pricing";
 
 const statusLabel = {
@@ -66,7 +67,32 @@ function TerrainIntrouvable() {
 
 function FicheTerrain() {
   const { lot } = Route.useLoaderData();
+  const sendReservation = useServerFn(submitReservationRequest);
   const [duree, setDuree] = useState<PlanDuration>(0);
+  const [reservationOpen, setReservationOpen] = useState(false);
+  const [reservationState, setReservationState] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [reservationError, setReservationError] = useState("");
+  async function handleReservationSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setReservationState("sending");
+    setReservationError("");
+    const form = new FormData(event.currentTarget);
+    try {
+      await sendReservation({ data: {
+        reference: lot.reference,
+        duration: duree,
+        fullName: String(form.get("fullName") ?? ""),
+        phone: String(form.get("phone") ?? ""),
+        email: String(form.get("email") ?? ""),
+        message: String(form.get("message") ?? ""),
+      } });
+      event.currentTarget.reset();
+      setReservationState("success");
+    } catch (error) {
+      setReservationError(error instanceof Error ? error.message : "Votre demande n’a pas pu être enregistrée.");
+      setReservationState("error");
+    }
+  }
   const plan = computePlan(lot.cash_price, duree);
   const achetable = lot.status === "disponible";
   const hasCoordinates = lot.latitude !== null && lot.longitude !== null;
@@ -216,17 +242,43 @@ function FicheTerrain() {
               </dl>
 
               {achetable ? (
-                <Link
-                  to="/contact"
+                <button
+                  type="button"
+                  onClick={() => { setReservationOpen((open) => !open); setReservationState("idle"); }}
                   className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary-dark"
+                  aria-expanded={reservationOpen}
                 >
-                  {duree === 0 ? "Demander l’achat" : "Demander une réservation"}
-                </Link>
+                  {reservationOpen ? "Fermer le formulaire" : duree === 0 ? "Demander l’achat" : "Demander une réservation"}
+                </button>
               ) : (
                 <p className="mt-6 rounded-lg bg-muted p-4 text-center text-sm font-medium text-muted-foreground">
                   Ce terrain n'est plus disponible à l'achat.
                 </p>
               )}
+              {reservationOpen && achetable ? (
+                <form onSubmit={handleReservationSubmit} className="mt-5 space-y-3 border-t border-border pt-5">
+                  <h3 className="font-semibold">{duree === 0 ? "Demande d’achat au comptant" : "Demande de réservation"}</h3>
+                  <p className="text-xs text-muted-foreground">Réf. {lot.reference} · {duree === 0 ? "Comptant" : `${duree} mois`} · Total {formatFcfa(plan.total)}</p>
+                  <label className="block text-sm font-medium">Nom complet
+                    <input name="fullName" required minLength={2} maxLength={100} autoComplete="name" className="mt-1.5 h-11 w-full rounded-lg border border-input bg-card px-3 text-sm" />
+                  </label>
+                  <label className="block text-sm font-medium">Téléphone
+                    <input name="phone" required minLength={8} maxLength={30} type="tel" autoComplete="tel" className="mt-1.5 h-11 w-full rounded-lg border border-input bg-card px-3 text-sm" />
+                  </label>
+                  <label className="block text-sm font-medium">Email (facultatif)
+                    <input name="email" type="email" maxLength={254} autoComplete="email" className="mt-1.5 h-11 w-full rounded-lg border border-input bg-card px-3 text-sm" />
+                  </label>
+                  <label className="block text-sm font-medium">Message (facultatif)
+                    <textarea name="message" maxLength={1500} rows={3} className="mt-1.5 w-full rounded-lg border border-input bg-card p-3 text-sm" />
+                  </label>
+                  <button type="submit" disabled={reservationState === "sending"} className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60">
+                    {reservationState === "sending" ? "Transmission…" : "Transmettre ma demande"}
+                  </button>
+                  {reservationState === "success" ? <p role="status" className="text-sm font-medium text-primary">Votre demande a été enregistrée. Notre équipe vous recontactera pour la suite.</p> : null}
+                  {reservationState === "error" ? <p role="alert" className="text-sm font-medium text-destructive">{reservationError}</p> : null}
+                  <p className="text-xs leading-relaxed text-muted-foreground">Cette demande ne constitue pas une réservation définitive ni une attribution du terrain. Elle sera examinée par notre équipe.</p>
+                </form>
+              ) : null}
 
               <button
                 type="button"
