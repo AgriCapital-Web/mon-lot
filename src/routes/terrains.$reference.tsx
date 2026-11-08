@@ -132,7 +132,7 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
             </div>
 
             <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">{lot.title}</h1>
-            {lot.is_catalogue_preview ? <p className="mt-3 rounded-lg border border-border bg-secondary/50 p-4 text-sm leading-relaxed text-muted-foreground">Le prix, la disponibilité, la situation foncière et les pièces relatives à ce terrain sont à confirmer auprès de Mon Lot avant toute décision ou transaction.</p> : null}
+            {lot.is_catalogue_preview ? <p className="mt-3 rounded-lg border border-border bg-secondary/50 p-4 text-sm leading-relaxed text-muted-foreground">Les visuels, le prix, la disponibilité, la situation foncière et les pièces relatives à ce terrain sont à confirmer auprès de Mon Lot avant toute décision ou transaction.</p> : null}
             <p className="mt-2 flex items-center gap-2 text-muted-foreground">
               <Compass className="size-4" aria-hidden="true" />
               {lot.area_name}, {lot.city}{lot.region ? ` — ${lot.region}` : ""}
