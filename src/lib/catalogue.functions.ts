@@ -22,7 +22,7 @@ async function getPublicSupabaseOrNull() {
     const { createPublicSupabase } = await import("./supabase-public.server");
     return createPublicSupabase();
   } catch (error) {
-    console.error("[lots] Supabase public configuration unavailable", error);
+    console.warn("[lots] Supabase public configuration unavailable", error);
     return null;
   }
 }
