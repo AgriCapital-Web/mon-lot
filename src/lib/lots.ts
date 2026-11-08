@@ -1,9 +1,10 @@
-export type LotStatus = "disponible" | "reserve" | "vendu";
+export type LotStatus = "disponible" | "reserve" | "vendu" | "a_confirmer";
 
 export const STATUS_LABEL: Record<LotStatus, string> = {
   disponible: "Disponible",
   reserve: "Réservé",
   vendu: "Vendu",
+  a_confirmer: "À confirmer",
 };
 
 export type PublicLot = {
