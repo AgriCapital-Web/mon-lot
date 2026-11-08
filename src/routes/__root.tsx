@@ -80,6 +80,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Mon Lot — Votre terrain en Côte d’Ivoire" },
       { name: "description", content: "Découvrez des terrains et des solutions de paiement adaptées à votre projet immobilier en Côte d’Ivoire." },
       { name: "author", content: "Mon Lot" },
+      { name: "theme-color", content: "#176B4D" },
+      { name: "application-name", content: "Mon Lot" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { property: "og:site_name", content: "Mon Lot" },
+      { property: "og:locale", content: "fr_CI" },
+      { property: "og:url", content: "https://mon-lot.vercel.app/" },
+      { property: "og:image", content: "https://mon-lot.vercel.app/og-monlot.jpg" },
+      { property: "og:image:secure_url", content: "https://mon-lot.vercel.app/og-monlot.jpg" },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "og:image:alt", content: "Mon Lot — Votre terrain, votre avenir en Côte d’Ivoire" },
+      { name: "twitter:title", content: "Mon Lot — Votre terrain en Côte d’Ivoire" },
+      { name: "twitter:description", content: "Des terrains et des paiements adaptés à votre projet immobilier." },
+      { name: "twitter:image", content: "https://mon-lot.vercel.app/og-monlot.jpg" },
       { property: "og:title", content: "Mon Lot — Votre terrain en Côte d’Ivoire" },
       { property: "og:description", content: "Des terrains et des paiements adaptés à votre projet immobilier." },
       { property: "og:type", content: "website" },
@@ -90,7 +104,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", href: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { rel: "apple-touch-icon", href: "/favicon.png", sizes: "512x512" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" },
@@ -118,6 +135,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+    if (window.location.protocol !== "https:" && window.location.hostname !== "localhost") return;
+
+    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch((error: unknown) => {
+      console.warn("[pwa] Service worker registration failed", error);
+    });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
