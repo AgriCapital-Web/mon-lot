@@ -2,7 +2,7 @@
 Référence : docs/CAHIER_DES_CHARGES.md
 
 ## P0 — Données et sécurité
-- [x] Retirer les terrains de démonstration des pages accueil et catalogue.
+- [x] Séparer les annonces réelles Supabase du jeu de données fictives de démonstration, clairement signalé et sans réservation réelle.
 - [x] Charger les fiches terrain depuis Supabase et supprimer la source statique de production.
 - [ ] Vérifier RLS sur une base de test (visiteur, utilisateur, administrateur) après la migration de correction.
 - [x] Mettre à niveau TanStack Start et aligner les dépendances de store ; build Vercel validé.
@@ -29,6 +29,7 @@ Référence : docs/CAHIER_DES_CHARGES.md
 - [x] Corriger le logo (servi au bon format WebP), déclarer favicon PNG/ICO, image Open Graph/Twitter et métadonnées sociales.
 - [x] Ajouter le manifeste PWA, l'enregistrement du service worker et le cache du shell pour une ouverture hors connexion.
 - [x] Ajouter une image locale de remplacement lorsque la photo d'un terrain est indisponible.
+- [x] Ajouter six fiches illustratives et des photos locales pour présenter les cartes, filtres, fiches détaillées et simulations, sans les confondre avec des offres réelles.
 - [ ] Produire une icône PWA dédiée 192x192 (les ressources actuelles sont en 256x256 ICO et 512x512 PNG), puis tester l'installation sur Android/iOS.
 
 ## P4 — Recette
