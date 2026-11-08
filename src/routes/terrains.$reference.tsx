@@ -2,7 +2,6 @@ import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, Compass, FileText, Maximize, Navigation, Share2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
-import heroTerrain from "@/assets/hero-terrain.jpg";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -116,10 +115,10 @@ function FicheTerrain() {
           <div>
             <div className="overflow-hidden rounded-xl border border-border">
               <img
-                src={lot.cover_image_url || heroTerrain}
+                src={lot.cover_image_url || "/demo/hero-terrain.jpg"}
                 onError={(event) => {
                   event.currentTarget.onerror = null;
-                  event.currentTarget.src = heroTerrain;
+                  event.currentTarget.src = "/demo/hero-terrain.jpg";
                 }}
                 alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
                 width={1200}
