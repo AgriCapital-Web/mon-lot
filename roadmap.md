@@ -3,14 +3,14 @@ Référence : docs/CAHIER_DES_CHARGES.md
 
 ## P0 — Données et sécurité
 - [x] Retirer les terrains de démonstration des pages accueil et catalogue.
-- [ ] Charger les fiches terrain depuis Supabase et supprimer la source statique de production.
+- [x] Charger les fiches terrain depuis Supabase et supprimer la source statique de production.
 - [ ] Vérifier RLS sur une base de test (visiteur, utilisateur, administrateur).
 - [ ] Vérifier les variables Vercel/Lovable sans exposer les secrets.
 
 ## P1 — Réservation et contact
-- [ ] Créer le formulaire de réservation prérempli depuis une fiche.
-- [ ] Brancher submitReservationRequest et gérer succès/erreur.
-- [ ] Revalider publication/disponibilité côté serveur.
+- [x] Créer le formulaire de réservation prérempli depuis une fiche.
+- [x] Brancher submitReservationRequest et gérer succès/erreur.
+- [x] Revalider publication/disponibilité côté serveur.
 - [ ] Ajouter protection anti-spam et validation téléphone.
 - [ ] Tester persistance des demandes et accusés de réception.
 

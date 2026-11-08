@@ -113,8 +113,8 @@ Responsive mobile/tablette/ordinateur, navigation clavier, labels, focus visible
 
 ### Inachevé ou incohérent constaté
 1. Accueil et catalogue utilisaient DEMO_LOTS lorsque la base était vide, contrairement à l’exigence de données réelles.
-2. La fiche /terrains/:reference utilise encore src/data/lots.ts (tableau statique), tandis que le catalogue utilise Supabase : risque de références, prix et statuts incohérents.
-3. Le parcours public de réservation n’est pas achevé : la fiche renvoie vers Contact alors qu’une fonction serveur de réservation existe.
+2. La fiche /terrains/:reference utilisait une source statique distincte du catalogue. Correction effectuée : elle charge désormais la référence depuis la même fonction serveur Supabase que le catalogue.
+3. Le parcours de réservation n’était pas raccordé. Correction effectuée : formulaire intégré à la fiche, appel à submitReservationRequest, contrôle serveur du statut et accusé de réception. Les tests métier et anti-spam restent à réaliser.
 4. Aucune route d’administration/connexion n’apparaît dans l’arborescence, malgré les fonctions serveur admin.
 5. Upload et gestion des photos/galeries ne sont pas finalisés.
 6. L’envoi email est conditionné à une configuration externe et n’est pas démontré.
