@@ -1,8 +1,4 @@
 import type { PublicLot } from "./lots";
-import lot1 from "@/assets/lot-1.jpg";
-import lot2 from "@/assets/lot-2.jpg";
-import lot3 from "@/assets/lot-3.jpg";
-import heroTerrain from "@/assets/hero-terrain.jpg";
 
 /**
  * Jeu de données fictives réservé à la démonstration visuelle.
@@ -20,8 +16,8 @@ export const DEMO_LOTS: PublicLot[] = [
     area_sqm: 500,
     cash_price: 12500000,
     status: "disponible",
-    cover_image_url: lot1,
-    gallery_urls: [lot1, lot2],
+    cover_image_url: "/demo/lot-1.jpg",
+    gallery_urls: ["/demo/lot-1.jpg", "/demo/lot-2.jpg"],
     description: "Exemple de fiche pour un lot à vocation résidentielle. Cette description est fictive et devra être remplacée par les informations vérifiées du propriétaire avant toute publication commerciale.",
     access_details: "Exemple illustratif : accès par une voie aménagée. Les conditions réelles d'accès restent à confirmer.",
     documents: ["Exemple : plan de situation à renseigner", "Exemple : documents fonciers à vérifier"],
@@ -41,8 +37,8 @@ export const DEMO_LOTS: PublicLot[] = [
     area_sqm: 400,
     cash_price: 8500000,
     status: "disponible",
-    cover_image_url: lot2,
-    gallery_urls: [lot2, lot3],
+    cover_image_url: "/demo/lot-2.jpg",
+    gallery_urls: ["/demo/lot-2.jpg", "/demo/lot-3.jpg"],
     description: "Exemple fictif destiné à montrer la présentation d'une offre résidentielle, ses caractéristiques et son prix sur la plateforme Mon Lot.",
     access_details: "Informations d'accès à compléter après vérification sur le terrain.",
     documents: ["Exemple : plan de lotissement à renseigner"],
@@ -62,8 +58,8 @@ export const DEMO_LOTS: PublicLot[] = [
     area_sqm: 600,
     cash_price: 15000000,
     status: "disponible",
-    cover_image_url: lot3,
-    gallery_urls: [lot3, lot1],
+    cover_image_url: "/demo/lot-3.jpg",
+    gallery_urls: ["/demo/lot-3.jpg", "/demo/lot-1.jpg"],
     description: "Exemple de présentation d'un lot résidentiel. La superficie, le prix, la situation et les caractéristiques affichés sont des données fictives.",
     access_details: "À compléter à partir d'une visite et des informations certifiées du vendeur.",
     documents: ["Exemple : pièces foncières à contrôler"],
@@ -83,8 +79,8 @@ export const DEMO_LOTS: PublicLot[] = [
     area_sqm: 800,
     cash_price: 9800000,
     status: "disponible",
-    cover_image_url: heroTerrain,
-    gallery_urls: [heroTerrain, lot2],
+    cover_image_url: "/demo/hero-terrain.jpg",
+    gallery_urls: ["/demo/hero-terrain.jpg", "/demo/lot-2.jpg"],
     description: "Exemple fictif d'une annonce de terrain à vocation mixte pour illustrer les filtres, les informations détaillées et le parcours de consultation.",
     access_details: "Les informations relatives à l'accès et aux réseaux sont à confirmer.",
     documents: ["Exemple : documents à fournir et à vérifier"],
@@ -104,8 +100,8 @@ export const DEMO_LOTS: PublicLot[] = [
     area_sqm: 2500,
     cash_price: 6500000,
     status: "disponible",
-    cover_image_url: lot1,
-    gallery_urls: [lot1, lot3],
+    cover_image_url: "/demo/lot-1.jpg",
+    gallery_urls: ["/demo/lot-1.jpg", "/demo/lot-3.jpg"],
     description: "Exemple fictif de parcelle à vocation agricole. Les caractéristiques agronomiques et foncières doivent être établies à partir de données réelles avant toute mise en vente.",
     access_details: "Accès à renseigner après visite de terrain.",
     documents: ["Exemple : plan et pièces foncières à vérifier"],
@@ -125,8 +121,8 @@ export const DEMO_LOTS: PublicLot[] = [
     area_sqm: 5000,
     cash_price: 11000000,
     status: "disponible",
-    cover_image_url: lot3,
-    gallery_urls: [lot3, lot2],
+    cover_image_url: "/demo/lot-3.jpg",
+    gallery_urls: ["/demo/lot-3.jpg", "/demo/lot-2.jpg"],
     description: "Exemple fictif de terrain à vocation agricole pour illustrer une fiche complète, avec galerie, superficie, prix et informations pratiques.",
     access_details: "Détails à confirmer lors de la visite et de l'étude du site.",
     documents: ["Exemple : documents fonciers à contrôler"],
