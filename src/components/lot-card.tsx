@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Maximize, MapPin } from "lucide-react";
 
 import { STATUS_LABEL, type LotStatus, type PublicLot } from "@/lib/lots";
-import heroTerrain from "@/assets/hero-terrain.jpg";
 import { computePlan, formatFcfa } from "@/lib/pricing";
 
 export function StatusBadge({ statut }: { statut: LotStatus }) {
@@ -30,10 +29,10 @@ export function LotCard({ lot, demo = false }: { lot: PublicLot; demo?: boolean 
     <article className="surface-card group flex flex-col overflow-hidden transition-shadow hover:shadow-[var(--shadow-lift)]">
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
-          src={lot.cover_image_url || heroTerrain}
+          src={lot.cover_image_url || "/demo/hero-terrain.jpg"}
           onError={(event) => {
             event.currentTarget.onerror = null;
-            event.currentTarget.src = heroTerrain;
+            event.currentTarget.src = "/demo/hero-terrain.jpg";
           }}
           alt={`${lot.title} à ${lot.area_name}`}
           loading="lazy"
