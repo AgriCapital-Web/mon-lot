@@ -95,8 +95,7 @@ function FicheTerrain() {
     }
   }
   const plan = computePlan(lot.cash_price, duree);
-  const isDemo = Boolean(lot.is_demo);
-  const achetable = !isDemo && lot.status === "disponible";
+  const achetable = lot.status === "disponible";
   const hasCoordinates = lot.latitude !== null && lot.longitude !== null;
 
   return (
@@ -110,17 +109,12 @@ function FicheTerrain() {
           <ArrowLeft className="size-4" aria-hidden="true" /> Catalogue
         </Link>
 
-        {isDemo ? <div className="mt-6 rounded-lg border border-sand/60 bg-sand/10 p-4 text-sm leading-relaxed text-muted-foreground"><strong className="text-foreground">Fiche de démonstration.</strong> Cette annonce sert uniquement à illustrer les fonctionnalités de Mon Lot. Les photos, prix, superficies, emplacements et documents sont fictifs ; aucune réservation ni transaction réelle ne peut être effectuée à partir de cet exemple.</div> : null}
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <div className="overflow-hidden rounded-xl border border-border">
               <img
-                src={lot.cover_image_url || "/demo/hero-terrain.jpg"}
-                onError={(event) => {
-                  event.currentTarget.onerror = null;
-                  event.currentTarget.src = "/demo/hero-terrain.jpg";
-                }}
-                alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
+                src={lot.cover_image_url}
+alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
                 width={1200}
                 height={800}
                 className="aspect-[3/2] w-full object-cover"
@@ -128,9 +122,7 @@ function FicheTerrain() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${isDemo ? "bg-sand text-sand-foreground" : lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>
-                {isDemo ? "Démonstration" : statusLabel[lot.status]}
-              </span>
+              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>{statusLabel[lot.status]}</span>
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Réf. {lot.reference}
               </span>
@@ -205,10 +197,10 @@ function FicheTerrain() {
 
           <aside className="lg:sticky lg:top-24 lg:h-fit">
             <div className="surface-card p-6">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">{isDemo ? "Prix indicatif — démonstration" : "Prix comptant officiel"}</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Prix comptant</p>
               <p className="mt-1 font-display text-3xl font-semibold text-primary">{formatFcfa(lot.cash_price)}</p>
 
-              <p className="mt-6 text-sm font-semibold">{isDemo ? "Simulation de paiement" : "Choisissez votre formule"}</p>
+              <p className="mt-6 text-sm font-semibold">Choisissez votre formule</p>
               <div className="mt-3 grid grid-cols-5 gap-2">
                 {ALL_DURATIONS.map((duration) => (
                   <button
@@ -248,7 +240,7 @@ function FicheTerrain() {
                 </> : null}
               </dl>
 
-              {isDemo ? <Link to="/contact" className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary-dark">Parler à un conseiller</Link> : achetable ? (
+              {achetable ? (
                 <button
                   type="button"
                   onClick={() => { setReservationOpen((open) => !open); setReservationState("idle"); }}
