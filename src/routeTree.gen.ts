@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as PaiementRouteImport } from './routes/paiement'
 import { Route as TerrainsRouteImport } from './routes/terrains'
 import { Route as TerrainsIndexRouteImport } from './routes/terrains.index'
 import { Route as TerrainsReferenceRouteImport } from './routes/terrains.$reference'
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -48,6 +54,7 @@ const TerrainsReferenceRoute = TerrainsReferenceRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/admin': typeof AdminRoute
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/paiement': typeof PaiementRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/terrains/': typeof TerrainsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/admin': typeof AdminRoute
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/paiement': typeof PaiementRoute
@@ -64,6 +72,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/admin': typeof AdminRoute
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/paiement': typeof PaiementRoute
@@ -74,6 +83,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/admin'
     | '/'
     | '/contact'
     | '/paiement'
@@ -81,9 +91,10 @@ export interface FileRouteTypes {
     | '/terrains/$reference'
     | '/terrains/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/paiement' | '/terrains/$reference' | '/terrains'
+  to: '/admin' | '/' | '/contact' | '/paiement' | '/terrains/$reference' | '/terrains'
   id:
     | '__root__'
+    | '/admin'
     | '/'
     | '/contact'
     | '/paiement'
@@ -93,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AdminRoute: typeof AdminRoute
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   PaiementRoute: typeof PaiementRoute
@@ -101,6 +113,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -161,6 +180,7 @@ const TerrainsRouteWithChildren = TerrainsRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  AdminRoute: AdminRoute,
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   PaiementRoute: PaiementRoute,
