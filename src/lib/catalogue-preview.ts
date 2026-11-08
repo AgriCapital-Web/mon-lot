@@ -52,13 +52,6 @@ const rows: Row[] = [
 ["Agboville","Grand-Morié – environs","Agnéby-Tiassa","Terrain de 2 000 m² près de Grand-Morié",2000,6400000,"agricole ou investissement","Accès, limites et disponibilité à confirmer.","/demo/hero-terrain.jpg"],
 ["Élibou","Aboisso – axe d’Élibou","Sud-Comoé","Terrain de 2 500 m² sur l’axe d’Élibou",2500,6800000,"agricole","Localisation exacte et accès à confirmer.","/demo/lot-2.jpg"],
 ["Bonon","Zaguiéta – environs de Bonon","Marahoué","Terrain de 2 000 m² près de Zaguiéta",2000,5800000,"agricole ou résidentiel","Accès et destination réglementaire à confirmer.","/demo/lot-3.jpg"],
-["Daloa","Issia – environs de Daloa","Haut-Sassandra","Terrain de 1 hectare dans le secteur d’Issia",10000,18500000,"agricole","Accès et conditions d’exploitation à confirmer sur place.","/demo/hero-terrain.jpg"],
-["Yamoussoukro","Toumodi – environs","Bélier","Parcelle agricole près de Toumodi",7000,14800000,"agricole","Accès, eau et limites à évaluer lors d’une visite.","/demo/lot-1.jpg"],
-["Divo","Guitry – environs","Lôh-Djiboua","Terrain de 5 000 m² près de Guitry",5000,10800000,"agricole","Accès saisonnier et situation exacte à préciser.","/demo/lot-2.jpg"],
-["Man","Facobly – environs","Guémon","Parcelle de 3 000 m² dans le secteur de Facobly",3000,7200000,"agricole ou investissement","Accès et configuration du terrain à confirmer.","/demo/lot-3.jpg"],
-["San-Pédro","Sassandra – environs","Gbôklè","Terrain de 3 500 m² dans le secteur de Sassandra",3500,10200000,"investissement","Localisation exacte, accès et servitudes à confirmer.","/demo/hero-terrain.jpg"],
-["Agboville","Céchi – environs","Agnéby-Tiassa","Parcelle agricole de 5 000 m² près de Céchi",5000,9700000,"agricole","Accès, limites et disponibilité à confirmer.","/demo/lot-1.jpg"],
-["Grand-Bassam","Bonoua – environs","Sud-Comoé","Terrain résidentiel dans le secteur de Bonoua",600,5100000,"résidentiel","Accès et raccordements à confirmer.","/demo/lot-2.jpg"]
 ];
 
 export const CATALOGUE_PREVIEW_LOTS: PublicLot[] = rows.map((row, index) => {
