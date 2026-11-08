@@ -23,10 +23,11 @@ function Contact() {
   const inputClass = "h-11 w-full rounded-lg border border-input bg-card px-3 text-sm";
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setState("sending"); setError("");
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     try {
       await submit({ data: { fullName: String(form.get("fullName") ?? ""), phone: String(form.get("phone") ?? ""), email: String(form.get("email") ?? ""), subject: String(form.get("subject") ?? ""), message: String(form.get("message") ?? "") } });
-      event.currentTarget.reset(); setState("success");
+      formElement.reset(); setState("success");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Votre message n’a pas pu être envoyé."); setState("error"); }
   }
   return <div className="min-h-dvh"><SiteHeader /><main className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
