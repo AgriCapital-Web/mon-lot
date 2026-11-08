@@ -26,7 +26,10 @@ Référence : docs/CAHIER_DES_CHARGES.md
 - [ ] Finaliser upload, stockage et galerie.
 - [ ] Finaliser le parcours UI de recommandations IA.
 - [ ] Configurer et tester les emails transactionnels.
-- [ ] Finaliser SEO, favicon, image sociale et accessibilité.
+- [x] Corriger le logo (servi au bon format WebP), déclarer favicon PNG/ICO, image Open Graph/Twitter et métadonnées sociales.
+- [x] Ajouter le manifeste PWA, l'enregistrement du service worker et le cache du shell pour une ouverture hors connexion.
+- [x] Ajouter une image locale de remplacement lorsque la photo d'un terrain est indisponible.
+- [ ] Compléter les icônes PWA dédiées 192x192 et 512x512, puis tester l'installation sur Android/iOS.
 
 ## P4 — Recette
 - [ ] Tests unitaires des formules et arrondis.
