@@ -4,7 +4,7 @@ import { Maximize, MapPin } from "lucide-react";
 import { STATUS_LABEL, type LotStatus, type PublicLot } from "@/lib/lots";
 import { computePlan, formatFcfa } from "@/lib/pricing";
 
-export function StatusBadge({ statut, indicatif = false }: { statut: LotStatus; indicatif?: boolean }) {
+export function StatusBadge({ statut }: { statut: LotStatus }) {
   const tone =
     statut === "disponible"
       ? "bg-primary text-primary-foreground"
@@ -16,7 +16,7 @@ export function StatusBadge({ statut, indicatif = false }: { statut: LotStatus; 
     <span
       className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${tone}`}
     >
-      {indicatif ? "À confirmer" : STATUS_LABEL[statut]}
+      {STATUS_LABEL[statut]}
     </span>
   );
 }
@@ -34,7 +34,7 @@ export function LotCard({ lot }: { lot: PublicLot }) {
           className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         />
         <div className="absolute left-3 top-3 flex gap-2">
-          <StatusBadge statut={lot.status} indicatif={lot.is_catalogue_preview} />
+          <StatusBadge statut={lot.status} />
         </div>
         <span className="absolute right-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold">
           {lot.reference}
