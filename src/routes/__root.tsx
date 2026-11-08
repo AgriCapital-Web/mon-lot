@@ -91,7 +91,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:secure_url", content: "https://mon-lot.vercel.app/monlot-logo.webp" },
       { property: "og:image:type", content: "image/webp" },
       { property: "og:image:alt", content: "Logo officiel Mon Lot — Votre terrain, plus accessible." },
-      { property: "og:image:width", content: "1920" },
       { name: "twitter:title", content: "Mon Lot — Votre terrain en Côte d’Ivoire" },
       { name: "twitter:description", content: "Des terrains et des paiements adaptés à votre projet immobilier." },
       { name: "twitter:image", content: "https://mon-lot.vercel.app/monlot-logo.webp" },
