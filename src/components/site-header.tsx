@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-import logo from "@/assets/monlot-logo.png";
+import logo from "@/assets/monlot-logo.webp";
 
 const navItems = [
   { to: "/", label: "Accueil" },
