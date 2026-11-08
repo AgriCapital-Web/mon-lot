@@ -4,7 +4,7 @@ import { Maximize, MapPin } from "lucide-react";
 import { STATUS_LABEL, type LotStatus, type PublicLot } from "@/lib/lots";
 import { computePlan, formatFcfa } from "@/lib/pricing";
 
-export function StatusBadge({ statut }: { statut: LotStatus }) {
+export function StatusBadge({ statut, indicatif = false }: { statut: LotStatus; indicatif?: boolean }) {
   const tone =
     statut === "disponible"
       ? "bg-primary text-primary-foreground"
@@ -16,7 +16,7 @@ export function StatusBadge({ statut }: { statut: LotStatus }) {
     <span
       className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${tone}`}
     >
-      {STATUS_LABEL[statut]}
+      {indicatif ? "À confirmer" : STATUS_LABEL[statut]}
     </span>
   );
 }
@@ -34,7 +34,7 @@ export function LotCard({ lot }: { lot: PublicLot }) {
           className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         />
         <div className="absolute left-3 top-3 flex gap-2">
-          <StatusBadge statut={lot.status} />
+          <StatusBadge statut={lot.status} indicatif={lot.is_catalogue_preview} />
         </div>
         <span className="absolute right-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold">
           {lot.reference}
@@ -56,12 +56,12 @@ export function LotCard({ lot }: { lot: PublicLot }) {
         </p>
 
         <div className="mt-auto space-y-1 border-t border-border pt-4">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Prix comptant</p>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">{lot.is_catalogue_preview ? "Prix indicatif" : "Prix comptant"}</p>
           <p className="font-display text-2xl font-semibold text-primary">
             {formatFcfa(lot.cash_price)}
           </p>
           <p className="text-sm text-muted-foreground">
-            ou {formatFcfa(plan6.monthly)}/mois sur 6 mois
+            {lot.is_catalogue_preview ? "Estimation sur 6 mois : " : "ou "}{formatFcfa(plan6.monthly)}/mois
           </p>
         </div>
 
