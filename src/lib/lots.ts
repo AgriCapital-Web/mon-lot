@@ -25,6 +25,8 @@ export type PublicLot = {
   longitude: number | null;
   is_featured: boolean;
   featured_priority: number | null;
+  /** Données fictives utilisées uniquement pour illustrer la plateforme. */
+  is_demo?: boolean;
 };
 
 export const PUBLIC_LOT_COLUMNS =
