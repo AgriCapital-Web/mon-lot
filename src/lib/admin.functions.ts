@@ -64,7 +64,7 @@ export const getAdminContext = createServerFn({ method: "GET" })
 
 export const saveProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ displayName: z.string().trim().min(2).max(100) }).parse(data),
   )
   .handler(async ({ data, context }) => {
@@ -89,7 +89,7 @@ export const adminListLots = createServerFn({ method: "GET" })
 
 export const adminSaveLot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => lotSchema.parse(data))
+  .validator((data: unknown) => lotSchema.parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
 
@@ -126,7 +126,7 @@ export const adminSaveLot = createServerFn({ method: "POST" })
 
 export const adminDeleteLot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { error } = await context.supabase.from("lots").delete().eq("id", data.id);
@@ -156,7 +156,7 @@ export const adminListRequests = createServerFn({ method: "GET" })
 
 export const adminUpdateRequestStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         table: z.enum(["reservation_requests", "contact_requests"]),
