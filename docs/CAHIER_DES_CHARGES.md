@@ -1,5 +1,5 @@
 # Cahier des charges fonctionnel et technique — Mon Lot
-Version consolidée 1.0 — 8 novembre 2026
+Version consolidée 1.1 — 8 novembre 2026
 
 ## 1. Objet et principes
 Mon Lot est une plateforme web de présentation et de commercialisation de terrains en Côte d’Ivoire. Le site public présente les offres réelles, leurs caractéristiques, les formules de paiement et permet de transmettre des demandes. Un espace privé doit permettre aux administrateurs de gérer le catalogue et les demandes.
@@ -90,6 +90,11 @@ Une fonction serveur existe. Elle doit recommander uniquement les terrains publi
 
 ## 8. UX, SEO et accessibilité
 Responsive mobile/tablette/ordinateur, navigation clavier, labels, focus visible, contrastes, réduction des animations, métadonnées par page, Open Graph/Twitter, favicon/image sociale, images optimisées et pages d’erreur françaises.
+- Logo local servi avec son véritable format WebP ; aucun chemin d’asset Lovable externe ne doit être requis en production.
+- Favicon PNG/ICO, icône Apple Touch et image Open Graph/Twitter servis depuis le domaine public du site.
+- Manifeste PWA français, mode standalone, couleurs de marque et service worker avec cache du shell et repli hors connexion.
+- Les photos de terrain indisponibles doivent afficher un visuel local de remplacement plutôt qu’une image cassée.
+- Recette PWA restante : produire des icônes dédiées 192x192 et 512x512 et vérifier l’installation réelle sur Android/iOS.
 
 ## 9. Critères de recette
 - Aucun terrain de démonstration sur les pages publiques.
