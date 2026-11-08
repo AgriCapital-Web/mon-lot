@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Building2, Camera, CircleDollarSign, Clock3, FileText, LayoutDashboard, LogOut, Plus, Send, ShieldCheck, Wallet, X } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,7 +41,7 @@ function PartnerWorkspace(){
  </>}
  </main></div>
 }
-function Stat({icon,label,value,detail}:{icon:React.ReactNode,label:string,value:string,detail:string}){return <div className="rounded-2xl border border-border bg-card p-5"><div className="flex items-center justify-between text-muted-foreground"><span className="text-sm">{label}</span><span className="text-primary">{icon}</span></div><p className="mt-3 text-3xl font-bold tabular-nums">{value}</p><p className="mt-1 text-xs text-muted-foreground">{detail}</p></div>}
+function Stat({icon,label,value,detail}:{icon:ReactNode,label:string,value:string,detail:string}){return <div className="rounded-2xl border border-border bg-card p-5"><div className="flex items-center justify-between text-muted-foreground"><span className="text-sm">{label}</span><span className="text-primary">{icon}</span></div><p className="mt-3 text-3xl font-bold tabular-nums">{value}</p><p className="mt-1 text-xs text-muted-foreground">{detail}</p></div>}
 function Status({value}:{value:string}){const map:Record<string,string>={draft:"Brouillon",pending:"En modération",approved:"Approuvée",rejected:"À corriger",suspended:"Suspendue",active:"Confirmé",confirmed:"Confirmé",failed:"Échoué",refunded:"Remboursé",expired:"Expiré"};return <span className="whitespace-nowrap rounded-full bg-muted px-3 py-1 text-xs font-semibold">{map[value]||value}</span>}
-function Field({name,label,type="text",required=false,placeholder}:{name:string,label:string,type?:string,required?:boolean,placeholder?:string}){return <label className={label+" "+(name==="coverImageUrl"?"sm:col-span-2":"")}>{label}{required&&<span className="text-destructive"> *</span>}<input name={name} type={type} required={required} placeholder={placeholder} className={field}/></label>}
+function Field({name,label,type="text",required=false,placeholder}:{name:string,label:string,type?:string,required?:boolean,placeholder?:string}){return <label className={"block text-sm font-medium "+(name==="coverImageUrl"?"sm:col-span-2":"")}>{label}{required&&<span className="text-destructive"> *</span>}<input name={name} type={type} required={required} placeholder={placeholder} className={field}/></label>}
 function Area({name,label,rows=3,required=false}:{name:string,label:string,rows?:number,required?:boolean}){return <label className="block text-sm font-medium sm:col-span-2">{label}<textarea name={name} rows={rows} required={required} className="mt-1.5 w-full rounded-xl border border-input bg-background p-3 text-sm"/></label>}
