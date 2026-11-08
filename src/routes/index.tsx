@@ -40,7 +40,7 @@ function Accueil() {
       <SiteHeader />
       <main>
         <section className="relative isolate min-h-[72vh] overflow-hidden bg-primary-dark text-primary-foreground">
-          <img src={featured[0]?.cover_image_url || "/demo/hero-terrain.jpg"} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/demo/hero-terrain.jpg"; }} alt="" className="absolute inset-0 -z-20 size-full object-cover opacity-65" />
+          {featured[0]?.cover_image_url ? <img src={featured[0].cover_image_url} alt="" className="absolute inset-0 -z-20 size-full object-cover opacity-65" /> : null}
           <div className="hero-overlay absolute inset-0 -z-10" />
           <div className="mx-auto flex min-h-[72vh] w-full max-w-6xl items-center px-4 py-20 sm:px-6">
             <div className="max-w-3xl">
