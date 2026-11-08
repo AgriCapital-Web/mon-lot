@@ -9,8 +9,7 @@ const navItems = [
   { to: "/terrains", label: "Terrains" },
   { to: "/paiement", label: "Paiement échelonné" },
   { to: "/contact", label: "Contact" },
-  { to: "/partenaire", label: "Devenir partenaire" },
-  { to: "/espace-partenaire", label: "Espace partenaire" },
+  { to: "/partenaire", label: "Professionnels" },
 ] as const;
 
 export function SiteHeader() {
