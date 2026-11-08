@@ -25,8 +25,8 @@ export type PublicLot = {
   longitude: number | null;
   is_featured: boolean;
   featured_priority: number | null;
-  /** Données fictives utilisées uniquement pour illustrer la plateforme. */
-  is_demo?: boolean;
+  /** Fiche de présentation du catalogue, sans transaction tant que les informations ne sont pas confirmées. */
+  is_catalogue_preview?: boolean;
 };
 
 export const PUBLIC_LOT_COLUMNS =
