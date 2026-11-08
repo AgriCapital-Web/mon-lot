@@ -49,3 +49,35 @@ export const getPartnerApplicationStatus = createServerFn({ method: "GET" })
     if (error) throw new Error("Impossible de charger le statut de votre demande.");
     return data ?? null;
   });
+
+export const adminListPartnerApplications = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const db = context.supabase as any;
+    const { data: role } = await db.from("user_roles").select("role")
+      .eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (!role) throw new Error("Accès réservé aux administrateurs.");
+    const { data, error } = await db.from("partner_applications").select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error("Impossible de charger les demandes partenaires.");
+    return data ?? [];
+  });
+
+export const adminReviewPartnerApplication = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    applicationId: z.string().uuid(),
+    approve: z.boolean(),
+    note: z.string().trim().max(1000).optional().or(z.literal("")),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    const db = context.supabase as any;
+    const { data: role } = await db.from("user_roles").select("role")
+      .eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (!role) throw new Error("Accès réservé aux administrateurs.");
+    const { error } = await db.rpc("admin_review_partner_application", {
+      _application_id: data.applicationId, _approve: data.approve, _note: data.note || null,
+    });
+    if (error) throw new Error("La décision n’a pas pu être enregistrée.");
+    return { ok: true as const };
+  });
