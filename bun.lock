@@ -2621,17 +2621,19 @@
       "sha512-yRg2pfOCxIs4ZJW3XYYHU/WgtD04FHSnfHlpRT7h7pR77hwkdRG4wxbKe4aq6P0RvXUTBSQpQeadS1SUYUe+KA=="
     ],
     "@tanstack/react-store": [
-      "@tanstack/react-store@0.9.3",
+      "@tanstack/react-store@0.11.2",
       "",
       {
         "dependencies": {
-          "@tanstack/store": "0.9.3"
+          "@tanstack/store": "0.11.2",
+          "use-sync-external-store": "1.7.0"
         },
         "peerDependencies": {
-          "react": ">=16.8.0 || >=17.0.0 || >=18.0.0 || >=19.0.0"
+          "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+          "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
         }
       },
-      "sha512-y2iHd/N9OkoQbFJLUX1T9vbc2O9tjH0pQRgTcx1/Nz4IlwLvkgpuglXUx+mXt0g5ZDFrEeDnONPqkbfxXJKwRg=="
+      "sha512-oj5O5DmiMWE+ih+SioX2ayC1kbK7d3fpLx0B75fPJr9nY3zU+hoW010yr64qXsY/9fyiLVE2bn5mGNV3owm8RQ=="
     ],
     "@tanstack/router-plugin": [
       "@tanstack/router-plugin@1.168.48",
@@ -2674,12 +2676,12 @@
       "sha512-QWfUZ3Yo923tdQn38LyKMU8rcTw69zc+T4dAvgTWV4O56SqFRsGfS0lSWIMhJRwXIx/bvdi7nTUBDdZtTHtpTQ=="
     ],
     "@tanstack/store": [
-      "@tanstack/store@0.9.3",
+      "@tanstack/store@0.11.2",
       "",
       {
         "dependencies": {}
       },
-      "sha512-8reSzl/qGWGGVKhBoxXPMWzATSbZLZFWhwBAFO9NAyp0TxzfBP0mIrGb8CP8KrQTmvzXlR/vFPPUrHTLBGyFyw=="
+      "sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q=="
     ],
     "@tanstack/virtual-file-routes": [
       "@tanstack/virtual-file-routes@1.162.0",
@@ -5239,14 +5241,14 @@
       "sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ=="
     ],
     "use-sync-external-store": [
-      "use-sync-external-store@1.6.0",
+      "use-sync-external-store@1.7.0",
       "",
       {
         "peerDependencies": {
           "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
         }
       },
-      "sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w=="
+      "sha512-6L+EeigHMQhdaIPNIFUKwfWJSwWFQ8gJbJ2DLOs5sDIegTwR9fRxvnM3uciHKjIZhFz+KAv2emhWMRvDmMcY8A=="
     ],
     "vaul": [
       "vaul@1.1.2",
@@ -5794,7 +5796,7 @@
       {
         "dependencies": {
           "@tanstack/history": "1.162.5",
-          "@tanstack/react-store": "^0.9.3",
+          "@tanstack/react-store": "^0.11.2",
           "@tanstack/router-core": "1.171.39",
           "isbot": "^5.1.22"
         },
