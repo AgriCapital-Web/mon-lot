@@ -112,7 +112,13 @@ function Accueil() {
           </div>
         </section>
         <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <div className="grid gap-8 bg-primary-dark p-8 text-primary-foreground sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
+          <section className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6">
+          <div className="rounded-xl border border-border bg-card p-7 sm:flex sm:items-center sm:justify-between sm:gap-8">
+            <div><p className="text-sm font-semibold uppercase text-primary">Vous êtes professionnel de l’immobilier ?</p><h2 className="mt-2 text-2xl font-semibold">Proposez vos terrains sur Mon Lot</h2><p className="mt-2 max-w-2xl text-sm text-muted-foreground">Agents, agences, promoteurs, aménageurs et propriétaires : demandez votre accès partenaire. Chaque dossier est étudié avant validation.</p></div>
+            <Link to="/partenaire" className="mt-5 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground sm:mt-0">Devenir partenaire <ArrowRight className="size-4"/></Link>
+          </div>
+        </section>
+        <div className="grid gap-8 bg-primary-dark p-8 text-primary-foreground sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
             <div><h2 className="text-3xl font-semibold">Un projet de terrain ?</h2><p className="mt-3 max-w-2xl text-primary-foreground/80">Notre équipe vous aide à préciser votre budget, votre zone et votre formule de paiement.</p></div>
             <Link to="/contact" className="inline-flex h-12 items-center justify-center rounded-lg bg-sand px-6 font-semibold text-sand-foreground">Nous contacter</Link>
           </div>
