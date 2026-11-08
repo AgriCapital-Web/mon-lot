@@ -2625,12 +2625,10 @@
       "",
       {
         "dependencies": {
-          "@tanstack/store": "0.9.3",
-          "use-sync-external-store": "^1.6.0"
+          "@tanstack/store": "0.9.3"
         },
         "peerDependencies": {
-          "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
-          "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+          "react": ">=16.8.0 || >=17.0.0 || >=18.0.0 || >=19.0.0"
         }
       },
       "sha512-y2iHd/N9OkoQbFJLUX1T9vbc2O9tjH0pQRgTcx1/Nz4IlwLvkgpuglXUx+mXt0g5ZDFrEeDnONPqkbfxXJKwRg=="
@@ -2678,7 +2676,9 @@
     "@tanstack/store": [
       "@tanstack/store@0.9.3",
       "",
-      {},
+      {
+        "dependencies": {}
+      },
       "sha512-8reSzl/qGWGGVKhBoxXPMWzATSbZLZFWhwBAFO9NAyp0TxzfBP0mIrGb8CP8KrQTmvzXlR/vFPPUrHTLBGyFyw=="
     ],
     "@tanstack/virtual-file-routes": [
