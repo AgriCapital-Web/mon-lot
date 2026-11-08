@@ -117,7 +117,8 @@ function Accueil() {
             <Link to="/partenaire" className="mt-5 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground sm:mt-0">Devenir partenaire <ArrowRight className="size-4"/></Link>
           </div>
         </section>
-        <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">\n        <div className="grid gap-8 bg-primary-dark p-8 text-primary-foreground sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
+        <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20"> 
+          <div className="grid gap-8 bg-primary-dark p-8 text-primary-foreground sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
             <div><h2 className="text-3xl font-semibold">Un projet de terrain ?</h2><p className="mt-3 max-w-2xl text-primary-foreground/80">Notre équipe vous aide à préciser votre budget, votre zone et votre formule de paiement.</p></div>
             <Link to="/contact" className="inline-flex h-12 items-center justify-center rounded-lg bg-sand px-6 font-semibold text-sand-foreground">Nous contacter</Link>
           </div>
