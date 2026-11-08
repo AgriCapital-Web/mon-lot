@@ -21,25 +21,20 @@ export function StatusBadge({ statut }: { statut: LotStatus }) {
   );
 }
 
-export function LotCard({ lot, demo = false }: { lot: PublicLot; demo?: boolean }) {
+export function LotCard({ lot }: { lot: PublicLot }) {
   const plan6 = computePlan(lot.cash_price, 6);
-  const isDemo = demo || Boolean(lot.is_demo);
 
   return (
     <article className="surface-card group flex flex-col overflow-hidden transition-shadow hover:shadow-[var(--shadow-lift)]">
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
-          src={lot.cover_image_url || "/demo/hero-terrain.jpg"}
-          onError={(event) => {
-            event.currentTarget.onerror = null;
-            event.currentTarget.src = "/demo/hero-terrain.jpg";
-          }}
+          src={lot.cover_image_url}
           alt={`${lot.title} à ${lot.area_name}`}
           loading="lazy"
           className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         />
         <div className="absolute left-3 top-3 flex gap-2">
-          {isDemo ? <span className="rounded-full bg-background/95 px-3 py-1 text-xs font-semibold text-primary">Démo</span> : <StatusBadge statut={lot.status} />}
+          <StatusBadge statut={lot.status} />
         </div>
         <span className="absolute right-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold">
           {lot.reference}
@@ -61,16 +56,16 @@ export function LotCard({ lot, demo = false }: { lot: PublicLot; demo?: boolean 
         </p>
 
         <div className="mt-auto space-y-1 border-t border-border pt-4">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">{isDemo ? "Prix indicatif — démonstration" : "Prix comptant"}</p>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Prix comptant</p>
           <p className="font-display text-2xl font-semibold text-primary">
             {formatFcfa(lot.cash_price)}
           </p>
           <p className="text-sm text-muted-foreground">
-            {isDemo ? "Simulation : " : "ou "}{formatFcfa(plan6.monthly)}/mois sur 6 mois
+            ou {formatFcfa(plan6.monthly)}/mois sur 6 mois
           </p>
         </div>
 
-        <Link to="/terrains/$reference" params={{ reference: lot.reference }} className="mt-2 inline-flex h-11 items-center justify-center rounded-lg bg-secondary px-4 text-sm font-semibold text-secondary-foreground transition-colors hover:bg-primary hover:text-primary-foreground">{isDemo ? "Voir l’exemple complet" : "Voir la fiche du terrain"}</Link>
+        <Link to="/terrains/$reference" params={{ reference: lot.reference }} className="mt-2 inline-flex h-11 items-center justify-center rounded-lg bg-secondary px-4 text-sm font-semibold text-secondary-foreground transition-colors hover:bg-primary hover:text-primary-foreground">Consulter la fiche du terrain</Link>
       </div>
     </article>
   );
