@@ -12,6 +12,7 @@ const statusLabel = {
   disponible: "Disponible",
   reserve: "Réservé",
   vendu: "Vendu",
+  a_confirmer: "À confirmer",
 } as const;
 
 export const Route = createFileRoute("/terrains/$reference")({
@@ -124,7 +125,7 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
             {lot.gallery_urls?.length ? <section aria-label="Galerie photos" className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4">{lot.gallery_urls.map((url, index) => <img key={url + index} src={url} alt={"Vue " + (index + 1) + " du terrain " + lot.reference} loading="lazy" className="aspect-[4/3] w-full rounded-lg border border-border object-cover" />)}</section> : null}
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>{lot.is_catalogue_preview ? "À confirmer" : statusLabel[lot.status]}</span>
+              <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${lot.status === "disponible" ? "bg-primary text-primary-foreground" : lot.status === "reserve" ? "bg-sand text-sand-foreground" : "bg-muted text-muted-foreground"}`}>{statusLabel[lot.status]}</span>
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                 Réf. {lot.reference}
               </span>
