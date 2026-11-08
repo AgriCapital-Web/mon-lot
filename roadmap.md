@@ -29,7 +29,7 @@ Référence : docs/CAHIER_DES_CHARGES.md
 - [x] Corriger le logo (servi au bon format WebP), déclarer favicon PNG/ICO, image Open Graph/Twitter et métadonnées sociales.
 - [x] Ajouter le manifeste PWA, l'enregistrement du service worker et le cache du shell pour une ouverture hors connexion.
 - [x] Ajouter une image locale de remplacement lorsque la photo d'un terrain est indisponible.
-- [ ] Compléter les icônes PWA dédiées 192x192 et 512x512, puis tester l'installation sur Android/iOS.
+- [ ] Produire une icône PWA dédiée 192x192 (les ressources actuelles sont en 256x256 ICO et 512x512 PNG), puis tester l'installation sur Android/iOS.
 
 ## P4 — Recette
 - [ ] Tests unitaires des formules et arrondis.
