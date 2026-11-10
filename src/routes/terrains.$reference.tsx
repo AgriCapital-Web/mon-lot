@@ -87,6 +87,7 @@ function FicheTerrain() {
         phone: String(form.get("phone") ?? ""),
         email: String(form.get("email") ?? ""),
         message: String(form.get("message") ?? ""),
+        website: String(form.get("website") ?? ""),
       } });
       formElement.reset();
       setReservationState("success");
@@ -262,6 +263,7 @@ alt={`${lot.title} — ${lot.area_name}, ${lot.city}`}
               )}
               {reservationOpen && achetable ? (
                 <form onSubmit={handleReservationSubmit} className="mt-5 space-y-3 border-t border-border pt-5">
+                  <label aria-hidden="true" className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">Ne pas remplir<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
                   <h3 className="font-semibold">{duree === 0 ? "Demande d’achat au comptant" : "Demande de réservation"}</h3>
                   <p className="text-xs text-muted-foreground">Réf. {lot.reference} · {duree === 0 ? "Comptant" : `${duree} mois`} · Total {formatFcfa(plan.total)}</p>
                   <label className="block text-sm font-medium">Nom complet
