@@ -4,6 +4,7 @@ const APP_SHELL = [
   "/manifest.webmanifest",
   "/favicon.ico",
   "/favicon.png",
+  "/icon-192.svg",
   "/og-monlot.jpg"
 ];
 
@@ -53,7 +54,7 @@ self.addEventListener("fetch", (event) => {
 
   if (
     url.pathname.startsWith("/assets/") ||
-    ["/favicon.ico", "/favicon.png", "/og-monlot.jpg", "/manifest.webmanifest"].includes(url.pathname)
+    ["/favicon.ico", "/favicon.png", "/icon-192.svg", "/og-monlot.jpg", "/manifest.webmanifest"].includes(url.pathname)
   ) {
     event.respondWith(
       caches.match(request).then((cached) => {

@@ -26,7 +26,7 @@ function Contact() {
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
     try {
-      await submit({ data: { fullName: String(form.get("fullName") ?? ""), phone: String(form.get("phone") ?? ""), email: String(form.get("email") ?? ""), subject: String(form.get("subject") ?? ""), message: String(form.get("message") ?? "") } });
+      await submit({ data: { fullName: String(form.get("fullName") ?? ""), phone: String(form.get("phone") ?? ""), email: String(form.get("email") ?? ""), subject: String(form.get("subject") ?? ""), message: String(form.get("message") ?? ""), website: String(form.get("website") ?? "") } });
       formElement.reset(); setState("success");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Votre message n’a pas pu être envoyé."); setState("error"); }
   }
@@ -34,6 +34,7 @@ function Contact() {
     <p className="text-sm font-semibold uppercase text-primary">Nous sommes à votre écoute</p><h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Parlons de votre projet</h1><p className="mt-3 max-w-2xl text-muted-foreground">Dites-nous ce que vous recherchez. Un conseiller Mon Lot vous recontactera.</p>
     <div className="mt-10 grid gap-10 lg:grid-cols-[1.35fr_1fr]">
       <form onSubmit={handleSubmit} className="space-y-5 border-t-2 border-primary pt-6">
+        <label aria-hidden="true" className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">Ne pas remplir<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
         <div className="grid gap-5 sm:grid-cols-2"><label className="text-sm font-medium">Nom complet<input name="fullName" required minLength={2} className={`${inputClass} mt-1.5`} /></label><label className="text-sm font-medium">Téléphone<input name="phone" type="tel" required minLength={8} className={`${inputClass} mt-1.5`} /></label></div>
         <label className="block text-sm font-medium">Email (facultatif)<input name="email" type="email" className={`${inputClass} mt-1.5`} /></label>
         <label className="block text-sm font-medium">Objet<input name="subject" required minLength={2} className={`${inputClass} mt-1.5`} placeholder="Recherche de terrain, visite…" /></label>
