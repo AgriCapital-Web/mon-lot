@@ -5,7 +5,7 @@ Version consolidée 1.1 — 8 novembre 2026
 Mon Lot est une plateforme web de présentation et de commercialisation de terrains en Côte d’Ivoire. Le site public présente les offres réelles, leurs caractéristiques, les formules de paiement et permet de transmettre des demandes. Un espace privé doit permettre aux administrateurs de gérer le catalogue et les demandes.
 
 Principes obligatoires :
-- Aucune offre, référence, localisation, superficie, photo ou prix fictif ne doit être présenté comme réel.
+- Les 50 fiches de présentation demandées restent intégrées au catalogue avec la présentation visuelle normale des annonces, sans mention « démo » ou « démonstration ». Elles restent identifiables comme informations indicatives / « À confirmer », ne sont pas réservables et ne doivent jamais être présentées comme des biens vérifiés. Seules les offres réelles publiées en base peuvent être réservées.
 - La base de données est la source de vérité du catalogue et des demandes.
 - Une demande n’est ni une vente ni une attribution automatique du terrain.
 - Les contrôles d’accès doivent être appliqués côté serveur et dans PostgreSQL via RLS.
@@ -25,7 +25,7 @@ L’attribution du rôle administrateur doit être faite par une procédure maî
 ### Accueil — /
 - Présentation de Mon Lot, proposition de valeur et appels à l’action vers catalogue/contact.
 - Terrains disponibles mis en vedette, triés par priorité puis date de publication.
-- Si aucune offre réelle n’est publiée, afficher un état vide commercial propre ; ne jamais injecter des données de démonstration.
+- Conserver les 50 fiches de présentation au format normal demandé, avec un statut « À confirmer » et un avertissement clair sur les informations indicatives ; ne pas les présenter comme des biens vérifiés et ne pas autoriser leur réservation. Les offres réelles publiées en base sont affichées en priorité.
 
 ### Catalogue — /terrains
 - Lire uniquement les terrains publiés depuis la base.
@@ -97,7 +97,7 @@ Responsive mobile/tablette/ordinateur, navigation clavier, labels, focus visible
 - Recette PWA restante : produire des icônes dédiées 192x192 et 512x512 et vérifier l’installation réelle sur Android/iOS.
 
 ## 9. Critères de recette
-- Aucun terrain de démonstration sur les pages publiques.
+- Les fiches de présentation sont visibles au format normal, sans libellé « démo », mais restent indicatives, marquées « À confirmer » et non réservables ; seules les offres publiées en base sont éligibles à une réservation.
 - Un terrain non publié est invisible anonymement ; une référence inconnue/retirée renvoie une page introuvable.
 - La fiche reflète la base ; sans coordonnées, pas de carte.
 - Les cinq formules sont exactes et la somme des échéances égale le solde.
@@ -147,3 +147,25 @@ P4 recette : tests prix, RLS, parcours et validation production.
 - Build Vercel : READY sur le commit d4f4aa67b275f55c2e364f50a9a2ee072fb6617c ; compilation client et serveur terminée.
 - La mise à niveau TanStack Start et l’alignement de react-store ont été validés par ce build.
 - La réussite du build ne remplace pas les tests de connexion, de rôles RLS, de création de terrain, de réservation et de parcours mobile sur la base réelle.
+
+
+## 14. Finalisation technique — 10 novembre 2026
+
+### Travaux appliqués sur la branche `finalisation/cahier-des-charges`
+- Les lectures publiques du catalogue filtrent explicitement les terrains publiés ; la réservation vérifie côté serveur que le terrain est publié et disponible.
+- Les formulaires de contact et de réservation intègrent un champ honeypot, une limitation de fréquence best-effort par instance serveur et une normalisation du numéro de téléphone.
+- Une page de réinitialisation du mot de passe est ajoutée et reliée aux écrans de connexion administrateur et partenaire.
+- Le manifeste PWA référence une icône vectorielle 192 px ; le service worker la met en cache avec le shell de l’application.
+- Une suite de tests couvre les cinq formules de paiement, l’acompte de 30 % et les arrondis ; un workflow GitHub Actions exécute lint, tests et build.
+- Les variables publiques Supabase déjà présentes dans la configuration du dépôt ont été synchronisées dans les environnements Vercel Production, Preview et Development. Un redéploiement de production a compilé avec succès le 10 novembre 2026.
+
+### Éléments non vérifiables ou bloqués par les accès externes
+1. Le projet Supabase référencé par la configuration Mon Lot n’est pas accessible avec la connexion Supabase actuellement autorisée. Les deux projets visibles dans cette connexion correspondent à d’autres applications. Les migrations, politiques RLS, rôles, tables et stockage Mon Lot ne peuvent donc pas être audités ni appliqués depuis cet accès.
+2. Le stockage des photos/galeries n’est pas activable tant que le bucket et ses politiques ne sont pas vérifiés sur le projet Supabase Mon Lot.
+3. Le prestataire de paiement et ses identifiants ne sont pas configurés dans Vercel. La confirmation manuelle par un administrateur ne remplace pas un paiement en ligne automatisé.
+4. La clé IA `LOVABLE_API_KEY` n’est pas configurée ; les recommandations IA ne peuvent pas être validées en production.
+5. Aucun fournisseur email ni domaine d’envoi vérifié n’est configuré ; l’enregistrement des demandes reste prioritaire et aucun email de notification ne doit être annoncé comme actif.
+6. Les conditions juridiques de réservation, d’acompte, d’annulation et de remboursement, ainsi que la validation définitive des taux, doivent être confirmées par la direction.
+7. La recette réelle des comptes administrateur/partenaire, des règles RLS, des formulaires, de l’installation PWA sur Android/iOS et des affichages mobiles/desktop reste à effectuer avec les accès et appareils concernés.
+
+**Statut :** les correctifs de code ci-dessus sont préparés sur la branche de finalisation. La clôture complète du cahier des charges et la mise en production de cette branche restent conditionnées à la validation du backend Supabase, du prestataire de paiement, de l’email et des éléments juridiques ci-dessus.
