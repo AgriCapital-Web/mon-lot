@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 import { PUBLIC_LOT_COLUMNS, type PublicLot } from "./lots";
@@ -13,7 +14,32 @@ const contactSchema = z.object({
   email: z.string().trim().email().max(254).optional().or(z.literal("")),
   subject: z.string().trim().min(2).max(160),
   message: z.string().trim().min(5).max(1500),
+  website: z.string().max(200).optional().default(""),
 });
+
+/** Limitation anti-spam best-effort par instance serverless, complétée par un champ honeypot. */
+const recentSubmissions = new Map<string, number[]>();
+function enforceSubmissionRate(key: string, limit: number, windowMs = 60_000) {
+  const now = Date.now();
+  const recent = (recentSubmissions.get(key) ?? []).filter((time) => now - time < windowMs);
+  if (recent.length >= limit) throw new Error("Trop de demandes ont été envoyées. Merci de réessayer dans une minute.");
+  recent.push(now);
+  recentSubmissions.set(key, recent);
+}
+function clientRateKey() {
+  try {
+    const request = getRequest();
+    const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+    return forwarded || request.headers.get("x-real-ip") || "unknown";
+  } catch {
+    return "unknown";
+  }
+}
+function normalizePhone(value: string) {
+  const normalized = value.replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "");
+  if (!/^\+?\d{8,15}$/.test(normalized)) throw new Error("Veuillez saisir un numéro de téléphone valide.");
+  return normalized;
+}
 
 /** Retourne null si les variables Supabase ne sont pas configurées sur l'hébergement.
  * Le site public reste consultable pendant la configuration de la base.
@@ -35,6 +61,7 @@ const reservationSchema = z.object({
   phone: z.string().trim().min(8).max(30),
   email: z.string().trim().email().max(254).optional().or(z.literal("")),
   message: z.string().trim().max(1500).optional().or(z.literal("")),
+  website: z.string().max(200).optional().default(""),
 });
 
 /** Tous les terrains publiés, terrains en vedette disponibles d'abord. */
@@ -45,6 +72,7 @@ export const listLots = createServerFn({ method: "GET" }).handler(async (): Prom
   const { data, error } = await supabase
     .from("lots")
     .select(PUBLIC_LOT_COLUMNS)
+    .eq("is_published", true)
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
@@ -66,6 +94,7 @@ export const listFeaturedLots = createServerFn({ method: "GET" }).handler(
     const { data, error } = await supabase
       .from("lots")
       .select(PUBLIC_LOT_COLUMNS)
+      .eq("is_published", true)
       .eq("is_featured", true)
       .eq("status", "disponible")
       .order("featured_priority", { ascending: true, nullsFirst: false })
@@ -93,24 +122,29 @@ export const getLotByReference = createServerFn({ method: "GET" })
       .from("lots")
       .select(PUBLIC_LOT_COLUMNS)
       .ilike("reference", data.reference)
+      .eq("is_published", true)
       .maybeSingle();
 
     if (error) {
       console.error("[lots] getLotByReference", error.message);
       return CATALOGUE_PREVIEW_LOTS.find((item) => item.reference.toLowerCase() === data.reference.toLowerCase()) ?? null;
     }
-    return (lot as PublicLot | null) ?? CATALOGUE_PREVIEW_LOTS.find((item) => item.reference.toLowerCase() === data.reference.toLowerCase()) ?? null;
+    if (!lot || !lot.is_published) return CATALOGUE_PREVIEW_LOTS.find((item) => item.reference.toLowerCase() === data.reference.toLowerCase()) ?? null;
+    return lot as PublicLot;
   });
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
+    if (data.website) return { ok: true as const };
+    enforceSubmissionRate(`contact:${clientRateKey()}`, 5);
+    const phone = normalizePhone(data.phone);
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
 
     const { error } = await supabase.from("contact_requests").insert({
       full_name: data.fullName,
-      phone: data.phone,
+      phone,
       email: data.email ? data.email : null,
       subject: data.subject,
       message: data.message,
@@ -127,19 +161,22 @@ export const submitContactRequest = createServerFn({ method: "POST" })
 export const submitReservationRequest = createServerFn({ method: "POST" })
   .validator((data: unknown) => reservationSchema.parse(data))
   .handler(async ({ data }) => {
+    if (data.website) return { ok: true as const, plan: null };
+    enforceSubmissionRate(`reservation:${clientRateKey()}`, 3);
+    const phone = normalizePhone(data.phone);
     const { createPublicSupabase } = await import("./supabase-public.server");
     const supabase = createPublicSupabase();
 
     const { data: lot, error: lotError } = await supabase
       .from("lots")
-      .select("id, reference, title, cash_price, status")
+      .select("id, reference, title, cash_price, status, is_published")
       .ilike("reference", data.reference)
       .maybeSingle();
 
     if (lotError || !lot) {
       throw new Error("Ce terrain n'est plus disponible.");
     }
-    if (lot.status !== "disponible") {
+    if (!lot.is_published || lot.status !== "disponible") {
       throw new Error("Ce terrain n'est plus disponible à la réservation.");
     }
 
@@ -154,7 +191,7 @@ export const submitReservationRequest = createServerFn({ method: "POST" })
       reservation_amount: plan.reservation,
       monthly_amount: plan.monthly,
       full_name: data.fullName,
-      phone: data.phone,
+      phone,
       email: data.email ? data.email : null,
       message: data.message ? data.message : null,
       status: "nouvelle",
