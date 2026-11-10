@@ -229,6 +229,7 @@ function AdminPage() {
               <label className="block text-sm font-medium">Mot de passe<input type="password" required autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} className={field} /></label>
               <button type="submit" disabled={busy} className={button}>{busy ? "Connexion…" : "Se connecter"}</button>
             </form>
+            <Link to="/reinitialiser-mot-de-passe" className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4">Mot de passe oublié ?</Link>
           </section>
         ) : null}
 
